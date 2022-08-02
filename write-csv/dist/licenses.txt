@@ -434,6 +434,9 @@ Apache-2.0
    limitations under the License.
 
 
+csv-writer
+MIT
+
 deprecation
 ISC
 The ISC License
