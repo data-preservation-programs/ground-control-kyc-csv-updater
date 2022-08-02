@@ -1,0 +1,8 @@
+name: 'Write CSV'
+description: 'Write output CSV files'
+inputs:
+  test-results:
+    required: true
+runs:
+  using: 'node16'
+  main: 'dist/index.js'
