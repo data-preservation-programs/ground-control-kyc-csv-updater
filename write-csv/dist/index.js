@@ -9616,21 +9616,25 @@ try {
     console.error('Missing test-results file path')
     process.exit(1)
   }
+  console.log('Path for test-results:', testResults)
   const outputSpListCsv = core.getInput('output-sp-list-csv') || process.argv[3]
   if (!outputSpListCsv) {
     console.error('Missing output-sp-list-csv file path')
     process.exit(1)
   }
+  console.log('Path for output-sp-list-csv:', outputSpListCsv)
   const outputOrgsCsv = core.getInput('output-orgs-csv') || process.argv[4]
   if (!outputOrgsCsv) {
     console.error('Missing output-orgs-csv file path')
     process.exit(1)
   }
+  console.log('Path for output-orgs-csv:', outputOrgsCsv)
   const outputProcessedCsv = core.getInput('processed-csv') || process.argv[5]
   if (!outputProcessedCsv) {
     console.error('Missing processed-csv file path')
     process.exit(1)
   }
+  console.log('Path for processed-csv:', outputProcessedCsv)
   run(testResults, outputSpListCsv, outputOrgsCsv, outputProcessedCsv)
 } catch (error) {
   core.setFailed(error.message)
