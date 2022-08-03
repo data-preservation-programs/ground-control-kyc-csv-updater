@@ -1,0 +1,24 @@
+{
+  "name": "sp-kyc-csv-updater",
+  "version": "1.0.0",
+  "description": "sp-kyc-csv-updater ===",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepare": "husky install"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jimpick/sp-kyc-csv-updater.git"
+  },
+  "keywords": [],
+  "author": "Jim Pick (@jimpick)",
+  "license": "MIT/Apache-2 (Permissive License Stack)",
+  "bugs": {
+    "url": "https://github.com/jimpick/sp-kyc-csv-updater/issues"
+  },
+  "homepage": "https://github.com/jimpick/sp-kyc-csv-updater#readme",
+  "devDependencies": {
+    "husky": "^8.0.1"
+  }
+}

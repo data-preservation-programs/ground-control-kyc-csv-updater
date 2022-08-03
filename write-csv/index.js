@@ -3,9 +3,7 @@ const core = require('@actions/core')
 const github = require('@actions/github')
 const createCsvWriter = require('csv-writer').createObjectCsvWriter
 
-async function run(inputFile, outputSpListCsv) {
-  const data = fs.readFileSync(inputFile, 'utf8')
-  const parsed = JSON.parse(data)
+async function run(inputFile, outputSpListCsv, outputOrgsCsv, outputProcessedCsv) {
 
   /*
   const inputFields = [
@@ -21,6 +19,8 @@ async function run(inputFile, outputSpListCsv) {
     "3_anything_else_you_want_us_to"
   ]
   */
+  const inputData = fs.readFileSync(inputFile, 'utf8')
+  const inputParsed = JSON.parse(inputData)
 
   // Desired schema:
   // sp_id,sp_organization,sp_org_id,loc_city,loc_country,loc_continent,active,slack_id
@@ -39,12 +39,11 @@ async function run(inputFile, outputSpListCsv) {
     'active',
     'slack_id'
   ]
-
   const spListCsvWriter = createCsvWriter({
     path: outputSpListCsv,
     header: spListOutputFields.map(field => ({ id: field, title: field }))
   })
-  const spListRecords = parsed.map(({ ResponseFields: responseFields }) => ({
+  const spListRecords = inputParsed.map(({ ResponseFields: responseFields }) => ({
     sp_id: 1, // FIXME
     sp_organization: responseFields['0_name'],
     sp_org_id: 1, // FIXME
@@ -55,6 +54,27 @@ async function run(inputFile, outputSpListCsv) {
     slack_id: '@FIXME' // FIXME
   }))
   await spListCsvWriter.writeRecords(spListRecords)
+
+  const now = (new Date()).toISOString()
+  const processedFields = [
+    'processed_time',
+    'responseId',
+    'timestamp',
+    'success',
+    'issue_id'
+  ]
+  const processedCsvWriter = createCsvWriter({
+    path: outputProcessedCsv,
+    header: processedFields.map(field => ({ id: field, title: field }))
+  })
+  const processedRecords = inputParsed.map(({ ResponseFields: responseFields }) => ({
+    responseId: responseFields.responseId,
+    timestamp: responseFields.timestamp,
+    processed_time: now,
+    success: true
+  }))
+  await processedCsvWriter.writeRecords(processedRecords)
+
   console.log('Done.')
 }
 
@@ -63,7 +83,7 @@ try {
   const outputSpListCsv = core.getInput('output-sp-list-csv') || process.argv[3]
   const outputOrgsCsv = core.getInput('output-orgs-csv') || process.argv[4]
   const outputProcessedCsv = core.getInput('processed-csv') || process.argv[5]
-  run(testResults, outputSpListCsv)
+  run(testResults, outputSpListCsv, outputOrgsCsv, outputProcessedCsv)
 } catch (error) {
   core.setFailed(error.message)
 }
