@@ -54,6 +54,7 @@ async function run(inputFile, outputSpListCsv, outputOrgsCsv, outputProcessedCsv
     slack_id: '@FIXME' // FIXME
   }))
   await spListCsvWriter.writeRecords(spListRecords)
+  console.log(`Wrote ${spListRecords.length} records to ${outputSpListCsv}`)
 
   const now = (new Date()).toISOString()
   const processedFields = [
@@ -74,15 +75,32 @@ async function run(inputFile, outputSpListCsv, outputOrgsCsv, outputProcessedCsv
     success: true
   }))
   await processedCsvWriter.writeRecords(processedRecords)
+  console.log(`Wrote ${processedRecords.length} records to ${outputProcessedCsv}`)
 
   console.log('Done.')
 }
 
 try {
   const testResults = core.getInput('test-results') || process.argv[2]
+  if (!testResults) {
+    console.error('Missing test-results file path')
+    process.exit(1)
+  }
   const outputSpListCsv = core.getInput('output-sp-list-csv') || process.argv[3]
+  if (!outputSpListCsv) {
+    console.error('Missing output-sp-list-csv file path')
+    process.exit(1)
+  }
   const outputOrgsCsv = core.getInput('output-orgs-csv') || process.argv[4]
+  if (!outputOrgsCsv) {
+    console.error('Missing output-orgs-csv file path')
+    process.exit(1)
+  }
   const outputProcessedCsv = core.getInput('processed-csv') || process.argv[5]
+  if (!outputProcessedCsv) {
+    console.error('Missing processed-csv file path')
+    process.exit(1)
+  }
   run(testResults, outputSpListCsv, outputOrgsCsv, outputProcessedCsv)
 } catch (error) {
   core.setFailed(error.message)
