@@ -9629,12 +9629,12 @@ try {
     process.exit(1)
   }
   console.log('Path for output-orgs-csv:', outputOrgsCsv)
-  const outputProcessedCsv = core.getInput('processed-csv') || process.argv[5]
+  const outputProcessedCsv = core.getInput('output-processed-csv') || process.argv[5]
   if (!outputProcessedCsv) {
-    console.error('Missing processed-csv file path')
+    console.error('Missing output-processed-csv file path')
     process.exit(1)
   }
-  console.log('Path for processed-csv:', outputProcessedCsv)
+  console.log('Path for output-processed-csv:', outputProcessedCsv)
   run(testResults, outputSpListCsv, outputOrgsCsv, outputProcessedCsv)
 } catch (error) {
   core.setFailed(error.message)
