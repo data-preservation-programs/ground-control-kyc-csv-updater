@@ -3,7 +3,11 @@ description: 'Write output CSV files'
 inputs:
   test-results:
     required: true
-  output-csv:
+  output-sp-list-csv:
+    required: true
+  output-orgs-csv:
+    required: true
+  output-processed-csv:
     required: true
 runs:
   using: 'node16'
