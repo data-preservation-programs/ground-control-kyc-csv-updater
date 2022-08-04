@@ -10022,8 +10022,27 @@ const github = __nccwpck_require__(6177)
 const createCsvWriter = (__nccwpck_require__(3863)/* .createObjectCsvWriter */ .eD)
 const neatCsv = (__nccwpck_require__(3729)/* ["default"] */ .Z)
 
-async function run(inputFile, outputSpListCsv, outputOrgsCsv, outputProcessedCsv) {
+async function run (
+  inputFile,
+  outputSpListCsv,
+  outputOrgsCsv,
+  outputProcessedCsv
+) {
+  // organizations.csv
+  let oldOrgsRecords = []
+  if (fs.existsSync(outputOrgsCsv)) {
+    const csvData = fs.readFileSync(outputOrgsCsv, 'utf8')
+    oldOrgsRecords = await neatCsv(csvData)
+  }
 
+  // sp-list.csv
+  let oldSpListRecords = []
+  if (fs.existsSync(outputSpListCsv)) {
+    const csvData = fs.readFileSync(outputSpListCsv, 'utf8')
+    oldSpListRecords = await neatCsv(csvData)
+  }
+
+  // Read input records
   /*
   const inputFields = [
     "responseId",
@@ -10040,20 +10059,69 @@ async function run(inputFile, outputSpListCsv, outputOrgsCsv, outputProcessedCsv
   */
   const inputData = fs.readFileSync(inputFile, 'utf8')
   const inputParsed = JSON.parse(inputData)
+  const inputs = []
+  const newOrgsRecords = []
+  const newSpListRecords = []
 
-  // Desired schema:
-  // sp_id,sp_organization,sp_org_id,loc_city,loc_country,loc_continent,active,slack_id
- 
-  // Examples:
-  // f01392893,"NGVP Cloud",1,"Utrecht","NL","EU",true,"rob"
-  // f01240,"DCENT",2,"Amsterdam","NL","EU",true,"Wijnand Schouten"
+  for (const inputRecord of inputParsed) {
+    const fields = inputRecord.ResponseFields
+    const input = {
+      inputRecord
+    }
+    let pass = true
+    let error = ''
 
-  // sp-list.csv
-  let oldSpListRecords = []
-  if (fs.existsSync(outputSpListCsv)) {
-    const csvData = fs.readFileSync(outputSpListCsv, 'utf8')
-    oldSpListRecords = await neatCsv(csvData)
+    const miners = []
+    if (fields['1_minerid']) {
+      const miner = {
+        minerId: fields['1_minerid'],
+        city: fields['1_city'],
+        countryCode: fields['1_country_code']
+      }
+      miner.pass = true
+      miners.push(miner)
+    }
+
+    input.pass = pass
+    input.error = error
+    if (pass) {
+      const orgId = oldOrgsRecords.length + newOrgsRecords.length + 1
+      newOrgsRecords.push({
+        sp_org_id: orgId,
+        sp_organization: fields['0_name'],
+        slack_id: '@FIXME'
+      })
+      for (const miner of miners) {
+        newSpListRecords.push({
+          sp_id: miner.minerId,
+          sp_organization: fields['0_name'],
+          sp_org_id: orgId,
+          loc_city: miner.city,
+          loc_country: miner.countryCode,
+          loc_continent: 'XX', // FIXME
+          active: true,
+          slack_id: '@FIXME' // FIXME
+        })
+      }
+    }
+    inputs.push(input)
   }
+
+  // Write organizations.csv
+  const orgsRecords = oldOrgsRecords.concat(newOrgsRecords)
+  const orgsOutputFields = ['sp_org_id', 'sp_organization', 'slack_id']
+  const orgsCsvWriter = createCsvWriter({
+    path: outputOrgsCsv,
+    header: orgsOutputFields.map(field => ({ id: field, title: field }))
+  })
+  await orgsCsvWriter.writeRecords(orgsRecords)
+  console.log(
+    `Wrote ${orgsRecords.length} records ` +
+      `(${newOrgsRecords.length} new) to ${outputOrgsCsv}`
+  )
+
+  // Write sp-list.csv
+  const spListRecords = oldSpListRecords.concat(newSpListRecords)
   const spListOutputFields = [
     'sp_id',
     'sp_organization',
@@ -10068,20 +10136,11 @@ async function run(inputFile, outputSpListCsv, outputOrgsCsv, outputProcessedCsv
     path: outputSpListCsv,
     header: spListOutputFields.map(field => ({ id: field, title: field }))
   })
-  const newSpListRecords = inputParsed.map(({ ResponseFields: responseFields }) => ({
-    sp_id: 1, // FIXME
-    sp_organization: responseFields['0_name'],
-    sp_org_id: 1, // FIXME
-    loc_city: responseFields['1_city'],
-    loc_country: responseFields['1_country_code'],
-    loc_continent: 'XX', // FIXME
-    active: true,
-    slack_id: '@FIXME' // FIXME
-  }))
-  const spListRecords = oldSpListRecords.concat(newSpListRecords)
   await spListCsvWriter.writeRecords(spListRecords)
-  console.log(`Wrote ${spListRecords.length} records ` +
-              `(${newSpListRecords.length} new) to ${outputSpListCsv}`)
+  console.log(
+    `Wrote ${spListRecords.length} records ` +
+      `(${newSpListRecords.length} new) to ${outputSpListCsv}`
+  )
 
   // processed.csv
   let oldProcessedRecords = []
@@ -10089,28 +10148,33 @@ async function run(inputFile, outputSpListCsv, outputOrgsCsv, outputProcessedCsv
     const csvData = fs.readFileSync(outputProcessedCsv, 'utf8')
     oldProcessedRecords = await neatCsv(csvData)
   }
-  const now = (new Date()).toISOString()
+  const now = new Date().toISOString()
   const processedFields = [
     'processed_time',
-    'responseId',
+    'response_id',
     'timestamp',
     'success',
+    'error_message',
     'issue_id'
   ]
   const processedCsvWriter = createCsvWriter({
     path: outputProcessedCsv,
     header: processedFields.map(field => ({ id: field, title: field }))
   })
-  const newProcessedRecords = inputParsed.map(({ ResponseFields: responseFields }) => ({
-    responseId: responseFields.responseId,
-    timestamp: responseFields.timestamp,
-    processed_time: now,
-    success: true
-  }))
+  const newProcessedRecords = inputParsed.map(
+    ({ ResponseFields: responseFields }) => ({
+      responseId: responseFields.responseId,
+      timestamp: responseFields.timestamp,
+      processed_time: now,
+      success: true
+    })
+  )
   const processedRecords = oldProcessedRecords.concat(newProcessedRecords)
   await processedCsvWriter.writeRecords(processedRecords)
-  console.log(`Wrote ${processedRecords.length} records ` +
-              `(${newProcessedRecords.length} new) to ${outputProcessedCsv}`)
+  console.log(
+    `Wrote ${processedRecords.length} records ` +
+      `(${newProcessedRecords.length} new) to ${outputProcessedCsv}`
+  )
 
   console.log('Done.')
 }
@@ -10122,24 +10186,29 @@ try {
     process.exit(1)
   }
   console.log('Path for test-results:', testResults)
+
   const outputSpListCsv = core.getInput('output-sp-list-csv') || process.argv[3]
   if (!outputSpListCsv) {
     console.error('Missing output-sp-list-csv file path')
     process.exit(1)
   }
   console.log('Path for output-sp-list-csv:', outputSpListCsv)
+
   const outputOrgsCsv = core.getInput('output-orgs-csv') || process.argv[4]
   if (!outputOrgsCsv) {
     console.error('Missing output-orgs-csv file path')
     process.exit(1)
   }
   console.log('Path for output-orgs-csv:', outputOrgsCsv)
-  const outputProcessedCsv = core.getInput('output-processed-csv') || process.argv[5]
+
+  const outputProcessedCsv =
+    core.getInput('output-processed-csv') || process.argv[5]
   if (!outputProcessedCsv) {
     console.error('Missing output-processed-csv file path')
     process.exit(1)
   }
   console.log('Path for output-processed-csv:', outputProcessedCsv)
+
   run(testResults, outputSpListCsv, outputOrgsCsv, outputProcessedCsv)
 } catch (error) {
   core.setFailed(error.message)
