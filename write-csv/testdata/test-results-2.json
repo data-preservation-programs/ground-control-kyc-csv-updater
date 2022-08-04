@@ -1,0 +1,76 @@
+[
+  {
+    "ResponseFields": {
+      "0_name": "Miner2",
+      "1_city": "Mianyang",
+      "1_country_code": "CN",
+      "1_do_you_have_another_minerid_to": "No",
+      "1_minerid": "f039940",
+      "3_anything_else_you_want_us_to": "asdffasdf",
+      "responseId": "ACYDBNgN1_-BdWxb3qObfu-y3mMhocT96QtBxLjfGODeidJuQIiM6Nd4NUmc4tXSo7AoVKc",
+      "timestamp": "2022-08-03T05:57:50.176799Z"
+    },
+    "MinerCheckResults": [
+      {
+        "Miner": {
+          "MinerID": "f039940",
+          "City": "Mianyang",
+          "CountyCode": "CN"
+        },
+        "Success": true,
+        "OutputLines": [
+          {
+            "Time": "2022-08-04T17:24:58.5767733Z",
+            "Action": "run",
+            "Package": "github.com/jimpick/sp-kyc-checks/minpower",
+            "Test": "TestMinPower"
+          },
+          {
+            "Time": "2022-08-04T17:24:58.576906601Z",
+            "Action": "output",
+            "Package": "github.com/jimpick/sp-kyc-checks/minpower",
+            "Test": "TestMinPower",
+            "Output": "=== RUN   TestMinPower\n"
+          },
+          {
+            "Time": "2022-08-04T17:24:58.916278114Z",
+            "Action": "output",
+            "Package": "github.com/jimpick/sp-kyc-checks/minpower",
+            "Test": "TestMinPower",
+            "Output": "2022/08/04 17:24:58 Miner power f039940: \u0026{{427435145297920 4235506252480512} {19438277887201902592 20771166632988737536} true}\n"
+          },
+          {
+            "Time": "2022-08-04T17:24:58.916636116Z",
+            "Action": "output",
+            "Package": "github.com/jimpick/sp-kyc-checks/minpower",
+            "Test": "TestMinPower",
+            "Output": "--- PASS: TestMinPower (0.34s)\n"
+          },
+          {
+            "Time": "2022-08-04T17:24:58.916670316Z",
+            "Action": "pass",
+            "Package": "github.com/jimpick/sp-kyc-checks/minpower",
+            "Test": "TestMinPower"
+          },
+          {
+            "Time": "2022-08-04T17:24:58.916678716Z",
+            "Action": "output",
+            "Package": "github.com/jimpick/sp-kyc-checks/minpower",
+            "Output": "PASS\n"
+          },
+          {
+            "Time": "2022-08-04T17:24:58.918471124Z",
+            "Action": "output",
+            "Package": "github.com/jimpick/sp-kyc-checks/minpower",
+            "Output": "ok  \tgithub.com/jimpick/sp-kyc-checks/minpower\t0.350s\n"
+          },
+          {
+            "Time": "2022-08-04T17:24:58.923381546Z",
+            "Action": "pass",
+            "Package": "github.com/jimpick/sp-kyc-checks/minpower"
+          }
+        ]
+      }
+    ]
+  }
+]

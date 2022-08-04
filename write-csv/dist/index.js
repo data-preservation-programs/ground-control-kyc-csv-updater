@@ -4497,6 +4497,288 @@ function removeHook(state, name, method) {
 
 /***/ }),
 
+/***/ 6776:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+const { Transform } = __nccwpck_require__(2781)
+
+const [cr] = Buffer.from('\r')
+const [nl] = Buffer.from('\n')
+const defaults = {
+  escape: '"',
+  headers: null,
+  mapHeaders: ({ header }) => header,
+  mapValues: ({ value }) => value,
+  newline: '\n',
+  quote: '"',
+  raw: false,
+  separator: ',',
+  skipComments: false,
+  skipLines: null,
+  maxRowBytes: Number.MAX_SAFE_INTEGER,
+  strict: false
+}
+
+class CsvParser extends Transform {
+  constructor (opts = {}) {
+    super({ objectMode: true, highWaterMark: 16 })
+
+    if (Array.isArray(opts)) opts = { headers: opts }
+
+    const options = Object.assign({}, defaults, opts)
+
+    options.customNewline = options.newline !== defaults.newline
+
+    for (const key of ['newline', 'quote', 'separator']) {
+      if (typeof options[key] !== 'undefined') {
+        ([options[key]] = Buffer.from(options[key]))
+      }
+    }
+
+    // if escape is not defined on the passed options, use the end value of quote
+    options.escape = (opts || {}).escape ? Buffer.from(options.escape)[0] : options.quote
+
+    this.state = {
+      empty: options.raw ? Buffer.alloc(0) : '',
+      escaped: false,
+      first: true,
+      lineNumber: 0,
+      previousEnd: 0,
+      rowLength: 0,
+      quoted: false
+    }
+
+    this._prev = null
+
+    if (options.headers === false) {
+      // enforce, as the column length check will fail if headers:false
+      options.strict = false
+    }
+
+    if (options.headers || options.headers === false) {
+      this.state.first = false
+    }
+
+    this.options = options
+    this.headers = options.headers
+  }
+
+  parseCell (buffer, start, end) {
+    const { escape, quote } = this.options
+    // remove quotes from quoted cells
+    if (buffer[start] === quote && buffer[end - 1] === quote) {
+      start++
+      end--
+    }
+
+    let y = start
+
+    for (let i = start; i < end; i++) {
+      // check for escape characters and skip them
+      if (buffer[i] === escape && i + 1 < end && buffer[i + 1] === quote) {
+        i++
+      }
+
+      if (y !== i) {
+        buffer[y] = buffer[i]
+      }
+      y++
+    }
+
+    return this.parseValue(buffer, start, y)
+  }
+
+  parseLine (buffer, start, end) {
+    const { customNewline, escape, mapHeaders, mapValues, quote, separator, skipComments, skipLines } = this.options
+
+    end-- // trim newline
+    if (!customNewline && buffer.length && buffer[end - 1] === cr) {
+      end--
+    }
+
+    const comma = separator
+    const cells = []
+    let isQuoted = false
+    let offset = start
+
+    if (skipComments) {
+      const char = typeof skipComments === 'string' ? skipComments : '#'
+      if (buffer[start] === Buffer.from(char)[0]) {
+        return
+      }
+    }
+
+    const mapValue = (value) => {
+      if (this.state.first) {
+        return value
+      }
+
+      const index = cells.length
+      const header = this.headers[index]
+
+      return mapValues({ header, index, value })
+    }
+
+    for (let i = start; i < end; i++) {
+      const isStartingQuote = !isQuoted && buffer[i] === quote
+      const isEndingQuote = isQuoted && buffer[i] === quote && i + 1 <= end && buffer[i + 1] === comma
+      const isEscape = isQuoted && buffer[i] === escape && i + 1 < end && buffer[i + 1] === quote
+
+      if (isStartingQuote || isEndingQuote) {
+        isQuoted = !isQuoted
+        continue
+      } else if (isEscape) {
+        i++
+        continue
+      }
+
+      if (buffer[i] === comma && !isQuoted) {
+        let value = this.parseCell(buffer, offset, i)
+        value = mapValue(value)
+        cells.push(value)
+        offset = i + 1
+      }
+    }
+
+    if (offset < end) {
+      let value = this.parseCell(buffer, offset, end)
+      value = mapValue(value)
+      cells.push(value)
+    }
+
+    if (buffer[end - 1] === comma) {
+      cells.push(mapValue(this.state.empty))
+    }
+
+    const skip = skipLines && skipLines > this.state.lineNumber
+    this.state.lineNumber++
+
+    if (this.state.first && !skip) {
+      this.state.first = false
+      this.headers = cells.map((header, index) => mapHeaders({ header, index }))
+
+      this.emit('headers', this.headers)
+      return
+    }
+
+    if (!skip && this.options.strict && cells.length !== this.headers.length) {
+      const e = new RangeError('Row length does not match headers')
+      this.emit('error', e)
+    } else {
+      if (!skip) this.writeRow(cells)
+    }
+  }
+
+  parseValue (buffer, start, end) {
+    if (this.options.raw) {
+      return buffer.slice(start, end)
+    }
+
+    return buffer.toString('utf-8', start, end)
+  }
+
+  writeRow (cells) {
+    const headers = (this.headers === false) ? cells.map((value, index) => index) : this.headers
+
+    const row = cells.reduce((o, cell, index) => {
+      const header = headers[index]
+      if (header === null) return o // skip columns
+      if (header !== undefined) {
+        o[header] = cell
+      } else {
+        o[`_${index}`] = cell
+      }
+      return o
+    }, {})
+
+    this.push(row)
+  }
+
+  _flush (cb) {
+    if (this.state.escaped || !this._prev) return cb()
+    this.parseLine(this._prev, this.state.previousEnd, this._prev.length + 1) // plus since online -1s
+    cb()
+  }
+
+  _transform (data, enc, cb) {
+    if (typeof data === 'string') {
+      data = Buffer.from(data)
+    }
+
+    const { escape, quote } = this.options
+    let start = 0
+    let buffer = data
+
+    if (this._prev) {
+      start = this._prev.length
+      buffer = Buffer.concat([this._prev, data])
+      this._prev = null
+    }
+
+    const bufferLength = buffer.length
+
+    for (let i = start; i < bufferLength; i++) {
+      const chr = buffer[i]
+      const nextChr = i + 1 < bufferLength ? buffer[i + 1] : null
+
+      this.state.rowLength++
+      if (this.state.rowLength > this.options.maxRowBytes) {
+        return cb(new Error('Row exceeds the maximum size'))
+      }
+
+      if (!this.state.escaped && chr === escape && nextChr === quote && i !== start) {
+        this.state.escaped = true
+        continue
+      } else if (chr === quote) {
+        if (this.state.escaped) {
+          this.state.escaped = false
+          // non-escaped quote (quoting the cell)
+        } else {
+          this.state.quoted = !this.state.quoted
+        }
+        continue
+      }
+
+      if (!this.state.quoted) {
+        if (this.state.first && !this.options.customNewline) {
+          if (chr === nl) {
+            this.options.newline = nl
+          } else if (chr === cr) {
+            if (nextChr !== nl) {
+              this.options.newline = cr
+            }
+          }
+        }
+
+        if (chr === this.options.newline) {
+          this.parseLine(buffer, this.state.previousEnd, i + 1)
+          this.state.previousEnd = i + 1
+          this.state.rowLength = 0
+        }
+      }
+    }
+
+    if (this.state.previousEnd === bufferLength) {
+      this.state.previousEnd = 0
+      return cb()
+    }
+
+    if (bufferLength - this.state.previousEnd < data.length) {
+      this._prev = data
+      this.state.previousEnd -= (bufferLength - data.length)
+      return cb()
+    }
+
+    this._prev = buffer
+    cb()
+  }
+}
+
+module.exports = (opts) => new CsvParser(opts)
+
+
+/***/ }),
+
 /***/ 3863:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
@@ -5047,6 +5329,135 @@ class Deprecation extends Error {
 }
 
 exports.Deprecation = Deprecation;
+
+
+/***/ }),
+
+/***/ 4752:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+"use strict";
+
+const {PassThrough: PassThroughStream} = __nccwpck_require__(2781);
+
+module.exports = options => {
+	options = {...options};
+
+	const {array} = options;
+	let {encoding} = options;
+	const isBuffer = encoding === 'buffer';
+	let objectMode = false;
+
+	if (array) {
+		objectMode = !(encoding || isBuffer);
+	} else {
+		encoding = encoding || 'utf8';
+	}
+
+	if (isBuffer) {
+		encoding = null;
+	}
+
+	const stream = new PassThroughStream({objectMode});
+
+	if (encoding) {
+		stream.setEncoding(encoding);
+	}
+
+	let length = 0;
+	const chunks = [];
+
+	stream.on('data', chunk => {
+		chunks.push(chunk);
+
+		if (objectMode) {
+			length = chunks.length;
+		} else {
+			length += chunk.length;
+		}
+	});
+
+	stream.getBufferedValue = () => {
+		if (array) {
+			return chunks;
+		}
+
+		return isBuffer ? Buffer.concat(chunks, length) : chunks.join('');
+	};
+
+	stream.getBufferedLength = () => length;
+
+	return stream;
+};
+
+
+/***/ }),
+
+/***/ 7851:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+"use strict";
+
+const {constants: BufferConstants} = __nccwpck_require__(8709);
+const stream = __nccwpck_require__(2781);
+const {promisify} = __nccwpck_require__(3837);
+const bufferStream = __nccwpck_require__(4752);
+
+const streamPipelinePromisified = promisify(stream.pipeline);
+
+class MaxBufferError extends Error {
+	constructor() {
+		super('maxBuffer exceeded');
+		this.name = 'MaxBufferError';
+	}
+}
+
+async function getStream(inputStream, options) {
+	if (!inputStream) {
+		throw new Error('Expected a stream');
+	}
+
+	options = {
+		maxBuffer: Infinity,
+		...options
+	};
+
+	const {maxBuffer} = options;
+	const stream = bufferStream(options);
+
+	await new Promise((resolve, reject) => {
+		const rejectPromise = error => {
+			// Don't retrieve an oversized buffer.
+			if (error && stream.getBufferedLength() <= BufferConstants.MAX_LENGTH) {
+				error.bufferedData = stream.getBufferedValue();
+			}
+
+			reject(error);
+		};
+
+		(async () => {
+			try {
+				await streamPipelinePromisified(inputStream, stream);
+				resolve();
+			} catch (error) {
+				rejectPromise(error);
+			}
+		})();
+
+		stream.on('data', () => {
+			if (stream.getBufferedLength() > maxBuffer) {
+				rejectPromise(new MaxBufferError());
+			}
+		});
+	});
+
+	return stream.getBufferedValue();
+}
+
+module.exports = getStream;
+module.exports.buffer = (stream, options) => getStream(stream, {...options, encoding: 'buffer'});
+module.exports.array = (stream, options) => getStream(stream, {...options, array: true});
+module.exports.MaxBufferError = MaxBufferError;
 
 
 /***/ }),
@@ -9375,6 +9786,14 @@ module.exports = require("assert");
 
 /***/ }),
 
+/***/ 8709:
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("buffer");
+
+/***/ }),
+
 /***/ 2361:
 /***/ ((module) => {
 
@@ -9479,6 +9898,58 @@ module.exports = require("zlib");
 
 /***/ }),
 
+/***/ 3729:
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __nccwpck_require__) => {
+
+"use strict";
+
+// EXPORTS
+__nccwpck_require__.d(__webpack_exports__, {
+  "Z": () => (/* binding */ neatCsv)
+});
+
+;// CONCATENATED MODULE: external "node:util"
+const external_node_util_namespaceObject = require("node:util");
+;// CONCATENATED MODULE: external "node:stream"
+const external_node_stream_namespaceObject = require("node:stream");
+;// CONCATENATED MODULE: external "node:process"
+const external_node_process_namespaceObject = require("node:process");
+;// CONCATENATED MODULE: external "node:buffer"
+const external_node_buffer_namespaceObject = require("node:buffer");
+// EXTERNAL MODULE: ./node_modules/csv-parser/index.js
+var csv_parser = __nccwpck_require__(6776);
+// EXTERNAL MODULE: ./node_modules/get-stream/index.js
+var get_stream = __nccwpck_require__(7851);
+;// CONCATENATED MODULE: ./node_modules/neat-csv/index.js
+
+
+
+
+
+
+// TODO: Use `import {pipeline as pipelinePromise} from 'node:stream/promises';` when targeting Node.js 16.
+
+const pipelinePromise = (0,external_node_util_namespaceObject.promisify)(external_node_stream_namespaceObject.pipeline);
+
+async function neatCsv(data, options) {
+	if (typeof data === 'string' || external_node_buffer_namespaceObject.Buffer.isBuffer(data)) {
+		data = external_node_stream_namespaceObject.Readable.from(data);
+	}
+
+	const parserStream = csv_parser(options);
+
+	// Node.js 16 has a bug with `.pipeline` for large strings. It works fine in Node.js 14 and 12.
+	if (Number(external_node_process_namespaceObject.versions.node.split('.')[0]) >= 16) {
+		return get_stream.array(data.pipe(parserStream));
+	}
+
+	await pipelinePromise([data, parserStream]);
+	return get_stream.array(parserStream);
+}
+
+
+/***/ }),
+
 /***/ 2020:
 /***/ ((module) => {
 
@@ -9520,6 +9991,23 @@ module.exports = JSON.parse('[[[0,44],"disallowed_STD3_valid"],[[45,46],"valid"]
 /******/ 	}
 /******/ 	
 /************************************************************************/
+/******/ 	/* webpack/runtime/define property getters */
+/******/ 	(() => {
+/******/ 		// define getter functions for harmony exports
+/******/ 		__nccwpck_require__.d = (exports, definition) => {
+/******/ 			for(var key in definition) {
+/******/ 				if(__nccwpck_require__.o(definition, key) && !__nccwpck_require__.o(exports, key)) {
+/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
+/******/ 				}
+/******/ 			}
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
+/******/ 	(() => {
+/******/ 		__nccwpck_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
+/******/ 	})();
+/******/ 	
 /******/ 	/* webpack/runtime/compat */
 /******/ 	
 /******/ 	if (typeof __nccwpck_require__ !== 'undefined') __nccwpck_require__.ab = __dirname + "/";
@@ -9532,6 +10020,7 @@ const fs = __nccwpck_require__(7147)
 const core = __nccwpck_require__(2421)
 const github = __nccwpck_require__(6177)
 const createCsvWriter = (__nccwpck_require__(3863)/* .createObjectCsvWriter */ .eD)
+const neatCsv = (__nccwpck_require__(3729)/* ["default"] */ .Z)
 
 async function run(inputFile, outputSpListCsv, outputOrgsCsv, outputProcessedCsv) {
 
@@ -9559,6 +10048,12 @@ async function run(inputFile, outputSpListCsv, outputOrgsCsv, outputProcessedCsv
   // f01392893,"NGVP Cloud",1,"Utrecht","NL","EU",true,"rob"
   // f01240,"DCENT",2,"Amsterdam","NL","EU",true,"Wijnand Schouten"
 
+  // sp-list.csv
+  let oldSpListRecords = []
+  if (fs.existsSync(outputSpListCsv)) {
+    const csvData = fs.readFileSync(outputSpListCsv, 'utf8')
+    oldSpListRecords = await neatCsv(csvData)
+  }
   const spListOutputFields = [
     'sp_id',
     'sp_organization',
@@ -9573,19 +10068,27 @@ async function run(inputFile, outputSpListCsv, outputOrgsCsv, outputProcessedCsv
     path: outputSpListCsv,
     header: spListOutputFields.map(field => ({ id: field, title: field }))
   })
-  const spListRecords = inputParsed.map(({ ResponseFields: responseFields }) => ({
+  const newSpListRecords = inputParsed.map(({ ResponseFields: responseFields }) => ({
     sp_id: 1, // FIXME
     sp_organization: responseFields['0_name'],
     sp_org_id: 1, // FIXME
     loc_city: responseFields['1_city'],
-    loc_county: responseFields['1_country_code'],
+    loc_country: responseFields['1_country_code'],
     loc_continent: 'XX', // FIXME
     active: true,
     slack_id: '@FIXME' // FIXME
   }))
+  const spListRecords = oldSpListRecords.concat(newSpListRecords)
   await spListCsvWriter.writeRecords(spListRecords)
-  console.log(`Wrote ${spListRecords.length} records to ${outputSpListCsv}`)
+  console.log(`Wrote ${spListRecords.length} records ` +
+              `(${newSpListRecords.length} new) to ${outputSpListCsv}`)
 
+  // processed.csv
+  let oldProcessedRecords = []
+  if (fs.existsSync(outputProcessedCsv)) {
+    const csvData = fs.readFileSync(outputProcessedCsv, 'utf8')
+    oldProcessedRecords = await neatCsv(csvData)
+  }
   const now = (new Date()).toISOString()
   const processedFields = [
     'processed_time',
@@ -9598,14 +10101,16 @@ async function run(inputFile, outputSpListCsv, outputOrgsCsv, outputProcessedCsv
     path: outputProcessedCsv,
     header: processedFields.map(field => ({ id: field, title: field }))
   })
-  const processedRecords = inputParsed.map(({ ResponseFields: responseFields }) => ({
+  const newProcessedRecords = inputParsed.map(({ ResponseFields: responseFields }) => ({
     responseId: responseFields.responseId,
     timestamp: responseFields.timestamp,
     processed_time: now,
     success: true
   }))
+  const processedRecords = oldProcessedRecords.concat(newProcessedRecords)
   await processedCsvWriter.writeRecords(processedRecords)
-  console.log(`Wrote ${processedRecords.length} records to ${outputProcessedCsv}`)
+  console.log(`Wrote ${processedRecords.length} records ` +
+              `(${newProcessedRecords.length} new) to ${outputProcessedCsv}`)
 
   console.log('Done.')
 }
