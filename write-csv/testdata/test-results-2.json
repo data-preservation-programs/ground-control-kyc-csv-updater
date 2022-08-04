@@ -210,5 +210,38 @@
         ]
       }
     ]
+  },
+  {
+    "ResponseFields": {
+      "0_name": "Miner4",
+      "0_slack_id": "miner4",
+      "1_city": "New York City",
+      "1_country_code": "United States",
+      "1_do_you_have_another_minerid_to": "Yes",
+      "1_minerid": "f01660839",
+      "2_city": "Toronto",
+      "2_country_code": "Canada",
+      "2_minerid": "f01558689",
+      "responseId": "ACYDBNiCkY2UM8sRM-clGuL3XAMTsHjOXQITA4KNb94u-W3b0C4Ggr5H4LmCu_SEOsbtUS7",
+      "timestamp": "2022-08-05T18:59:26.228879Z"
+    },
+    "MinerCheckResults": [
+      {
+        "Miner": {
+          "MinerID": "f01660839",
+          "City": "New York City",
+          "CountyCode": "United States"
+        },
+        "Success": false
+      },
+      {
+        "Miner": {
+          "MinerID": "f01558689",
+          "City": "Toronto",
+          "CountyCode": "Canada"
+        },
+        "Success": true
+      }
+    ]
   }
 ]

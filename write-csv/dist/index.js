@@ -10066,27 +10066,35 @@ async function run (
 
   for (const inputRecord of inputParsed) {
     const fields = inputRecord.ResponseFields
-    const input = {
-      inputRecord
-    }
+    const input = { fields }
     let pass = true
-    let error = ''
+    const errors = []
+
+    const minerCheckResults = {}
+    for (const minerCheck of inputRecord.MinerCheckResults) {
+      minerCheckResults[minerCheck.Miner.MinerID] = minerCheck.Success
+    }
 
     const miners = []
     for (let i = 1; i <= 3; i++) {
       if (fields[`${i}_minerid`]) {
+        const minerId = fields[`${i}_minerid`]
         const miner = {
-          minerId: fields[`${i}_minerid`],
+          minerId,
           city: fields[`${i}_city`],
           countryCode: fields[`${i}_country_code`]
         }
-        miner.pass = true
+        miner.pass = !!minerCheckResults[minerId]
+        if (!miner.pass) {
+          errors.push(`${minerId} failed`)
+          pass = false
+        }
         miners.push(miner)
       }
     }
 
     input.pass = pass
-    input.error = error
+    input.errors = errors
     if (pass) {
       const orgId = oldOrgsRecords.length + newOrgsRecords.length + 1
       newOrgsRecords.push({
@@ -10164,12 +10172,13 @@ async function run (
     path: outputProcessedCsv,
     header: processedFields.map(field => ({ id: field, title: field }))
   })
-  const newProcessedRecords = inputParsed.map(
-    ({ ResponseFields: responseFields }) => ({
-      responseId: responseFields.responseId,
-      timestamp: responseFields.timestamp,
+  const newProcessedRecords = inputs.map(
+    ({ fields, pass, errors }) => ({
+      responseId: fields.responseId,
+      timestamp: fields.timestamp,
       processed_time: now,
-      success: true
+      success: pass,
+      error_message: errors ? errors.join(',') : undefined
     })
   )
   const processedRecords = oldProcessedRecords.concat(newProcessedRecords)
