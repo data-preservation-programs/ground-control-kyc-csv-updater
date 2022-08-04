@@ -10048,6 +10048,7 @@ async function run (
     "responseId",
     "timestamp",
     "0_name",
+    "0_slack_id",
     "1_minerid",
     "1_city",
     "1_country_code",
@@ -10072,14 +10073,16 @@ async function run (
     let error = ''
 
     const miners = []
-    if (fields['1_minerid']) {
-      const miner = {
-        minerId: fields['1_minerid'],
-        city: fields['1_city'],
-        countryCode: fields['1_country_code']
+    for (let i = 1; i <= 3; i++) {
+      if (fields[`${i}_minerid`]) {
+        const miner = {
+          minerId: fields[`${i}_minerid`],
+          city: fields[`${i}_city`],
+          countryCode: fields[`${i}_country_code`]
+        }
+        miner.pass = true
+        miners.push(miner)
       }
-      miner.pass = true
-      miners.push(miner)
     }
 
     input.pass = pass
@@ -10089,7 +10092,7 @@ async function run (
       newOrgsRecords.push({
         sp_org_id: orgId,
         sp_organization: fields['0_name'],
-        slack_id: '@FIXME'
+        slack_id: fields['0_slack_id']
       })
       for (const miner of miners) {
         newSpListRecords.push({
@@ -10100,7 +10103,7 @@ async function run (
           loc_country: miner.countryCode,
           loc_continent: 'XX', // FIXME
           active: true,
-          slack_id: '@FIXME' // FIXME
+          slack_id: fields['0_slack_id']
         })
       }
     }

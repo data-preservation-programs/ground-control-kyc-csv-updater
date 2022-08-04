@@ -2,6 +2,7 @@
   {
     "ResponseFields": {
       "0_name": "Magik",
+      "0_slack_id": "magik",
       "1_city": "Krakow",
       "1_country_code": "PL",
       "1_do_you_have_another_minerid_to": "No",

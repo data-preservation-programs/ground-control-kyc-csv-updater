@@ -2,6 +2,7 @@
   {
     "ResponseFields": {
       "0_name": "Miner2",
+      "0_slack_id": "miner2",
       "1_city": "Mianyang",
       "1_country_code": "CN",
       "1_do_you_have_another_minerid_to": "No",
@@ -66,6 +67,143 @@
           },
           {
             "Time": "2022-08-04T17:24:58.923381546Z",
+            "Action": "pass",
+            "Package": "github.com/jimpick/sp-kyc-checks/minpower"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "ResponseFields": {
+      "0_name": "Miner3",
+      "0_slack_id": "miner3",
+      "1_city": "Las Vegas",
+      "1_country_code": "United States",
+      "1_do_you_have_another_minerid_to": "Yes",
+      "1_minerid": "f01660837",
+      "2_city": "Montreal",
+      "2_country_code": "Canada",
+      "2_minerid": "f01558688",
+      "responseId": "ACYDBNiCkY2UM8sRM-clGuL3XAMTsHjOXQITA4KNb94u-W3b0C4Ggr5H4LmCu_SEOsbtUS8",
+      "timestamp": "2022-08-04T18:59:26.228879Z"
+    },
+    "MinerCheckResults": [
+      {
+        "Miner": {
+          "MinerID": "f01660837",
+          "City": "Las Vegas",
+          "CountyCode": "United States"
+        },
+        "Success": true,
+        "OutputLines": [
+          {
+            "Time": "2022-08-04T20:53:37.764133435Z",
+            "Action": "run",
+            "Package": "github.com/jimpick/sp-kyc-checks/minpower",
+            "Test": "TestMinPower"
+          },
+          {
+            "Time": "2022-08-04T20:53:37.764258538Z",
+            "Action": "output",
+            "Package": "github.com/jimpick/sp-kyc-checks/minpower",
+            "Test": "TestMinPower",
+            "Output": "=== RUN   TestMinPower\n"
+          },
+          {
+            "Time": "2022-08-04T20:53:37.907921652Z",
+            "Action": "output",
+            "Package": "github.com/jimpick/sp-kyc-checks/minpower",
+            "Test": "TestMinPower",
+            "Output": "2022/08/04 20:53:37 Miner power f01660837: \u0026{{372871880769536 3694310907248640} {19440961382768443392 20777658535853326336} true}\n"
+          },
+          {
+            "Time": "2022-08-04T20:53:37.908145957Z",
+            "Action": "output",
+            "Package": "github.com/jimpick/sp-kyc-checks/minpower",
+            "Test": "TestMinPower",
+            "Output": "--- PASS: TestMinPower (0.14s)\n"
+          },
+          {
+            "Time": "2022-08-04T20:53:37.908169458Z",
+            "Action": "pass",
+            "Package": "github.com/jimpick/sp-kyc-checks/minpower",
+            "Test": "TestMinPower"
+          },
+          {
+            "Time": "2022-08-04T20:53:37.908176558Z",
+            "Action": "output",
+            "Package": "github.com/jimpick/sp-kyc-checks/minpower",
+            "Output": "PASS\n"
+          },
+          {
+            "Time": "2022-08-04T20:53:37.909797098Z",
+            "Action": "output",
+            "Package": "github.com/jimpick/sp-kyc-checks/minpower",
+            "Output": "ok  \tgithub.com/jimpick/sp-kyc-checks/minpower\t0.154s\n"
+          },
+          {
+            "Time": "2022-08-04T20:53:37.915050626Z",
+            "Action": "pass",
+            "Package": "github.com/jimpick/sp-kyc-checks/minpower"
+          }
+        ]
+      },
+      {
+        "Miner": {
+          "MinerID": "f01558688",
+          "City": "Montreal",
+          "CountyCode": "Canada"
+        },
+        "Success": true,
+        "OutputLines": [
+          {
+            "Time": "2022-08-04T20:53:39.480326813Z",
+            "Action": "run",
+            "Package": "github.com/jimpick/sp-kyc-checks/minpower",
+            "Test": "TestMinPower"
+          },
+          {
+            "Time": "2022-08-04T20:53:39.480437416Z",
+            "Action": "output",
+            "Package": "github.com/jimpick/sp-kyc-checks/minpower",
+            "Test": "TestMinPower",
+            "Output": "=== RUN   TestMinPower\n"
+          },
+          {
+            "Time": "2022-08-04T20:53:39.572841976Z",
+            "Action": "output",
+            "Package": "github.com/jimpick/sp-kyc-checks/minpower",
+            "Test": "TestMinPower",
+            "Output": "2022/08/04 20:53:39 Miner power f01558688: \u0026{{177674207100928 1743076413243392} {19440961382768443392 20777658535853326336} true}\n"
+          },
+          {
+            "Time": "2022-08-04T20:53:39.573035381Z",
+            "Action": "output",
+            "Package": "github.com/jimpick/sp-kyc-checks/minpower",
+            "Test": "TestMinPower",
+            "Output": "--- PASS: TestMinPower (0.09s)\n"
+          },
+          {
+            "Time": "2022-08-04T20:53:39.573050481Z",
+            "Action": "pass",
+            "Package": "github.com/jimpick/sp-kyc-checks/minpower",
+            "Test": "TestMinPower"
+          },
+          {
+            "Time": "2022-08-04T20:53:39.573057382Z",
+            "Action": "output",
+            "Package": "github.com/jimpick/sp-kyc-checks/minpower",
+            "Output": "PASS\n"
+          },
+          {
+            "Time": "2022-08-04T20:53:39.574381514Z",
+            "Action": "output",
+            "Package": "github.com/jimpick/sp-kyc-checks/minpower",
+            "Output": "ok  \tgithub.com/jimpick/sp-kyc-checks/minpower\t0.101s\n"
+          },
+          {
+            "Time": "2022-08-04T20:53:39.57914203Z",
             "Action": "pass",
             "Package": "github.com/jimpick/sp-kyc-checks/minpower"
           }
