@@ -1,13 +1,13 @@
 [
   {
     "ResponseFields": {
-      "0_name": "Magik",
-      "0_slack_id": "magik",
+      "0_storage_provider_operator_name": "Magik",
+      "0_your_name": "Magik",
+      "0_your_handle_on_filecoin_io_slack": "magik",
+      "0_your_email": "magik@protocol.ai",
+      "1_minerid": "f02620",
       "1_city": "Krakow",
       "1_country_code": "PL",
-      "1_do_you_have_another_minerid_to": "No",
-      "1_minerid": "f02620",
-      "3_anything_else_you_want_us_to": "Hi",
       "responseId": "ACYDBNgprRkOqOe1d29ko3x_mCMhg0o2Q0adW-EszHsfs_GLmVsPYcf9mNYyDY4XhNB1vE4",
       "timestamp": "2022-08-02T19:17:56.121087Z"
     },

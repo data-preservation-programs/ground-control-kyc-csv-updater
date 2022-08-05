@@ -1,13 +1,13 @@
 [
   {
     "ResponseFields": {
-      "0_name": "Miner2",
-      "0_slack_id": "miner2",
+      "0_storage_provider_operator_name": "Miner2",
+      "0_your_name": "Miner2 Person",
+      "0_your_handle_on_filecoin_io_slack": "miner2",
+      "0_your_email": "miner2@example.com",
+      "1_minerid": "f039940",
       "1_city": "Mianyang",
       "1_country_code": "CN",
-      "1_do_you_have_another_minerid_to": "No",
-      "1_minerid": "f039940",
-      "3_anything_else_you_want_us_to": "asdffasdf",
       "responseId": "ACYDBNgN1_-BdWxb3qObfu-y3mMhocT96QtBxLjfGODeidJuQIiM6Nd4NUmc4tXSo7AoVKc",
       "timestamp": "2022-08-03T05:57:50.176799Z"
     },
@@ -76,15 +76,16 @@
   },
   {
     "ResponseFields": {
-      "0_name": "Miner3",
-      "0_slack_id": "miner3",
-      "1_city": "Las Vegas",
-      "1_country_code": "United States",
-      "1_do_you_have_another_minerid_to": "Yes",
+      "0_storage_provider_operator_name": "Miner3",
+      "0_your_name": "Miner3 Person",
+      "0_your_handle_on_filecoin_io_slack": "miner3",
+      "0_your_email": "miner3@example.com",
       "1_minerid": "f01660837",
-      "2_city": "Montreal",
-      "2_country_code": "Canada",
+      "1_city": "Las Vegas",
+      "1_country_code": "US",
       "2_minerid": "f01558688",
+      "2_city": "Montreal",
+      "2_country_code": "CA",
       "responseId": "ACYDBNiCkY2UM8sRM-clGuL3XAMTsHjOXQITA4KNb94u-W3b0C4Ggr5H4LmCu_SEOsbtUS8",
       "timestamp": "2022-08-04T18:59:26.228879Z"
     },
@@ -213,15 +214,16 @@
   },
   {
     "ResponseFields": {
-      "0_name": "Miner4",
-      "0_slack_id": "miner4",
-      "1_city": "New York City",
-      "1_country_code": "United States",
-      "1_do_you_have_another_minerid_to": "Yes",
+      "0_storage_provider_operator_name": "Miner4",
+      "0_your_name": "Miner4 Person",
+      "0_your_handle_on_filecoin_io_slack": "miner4",
+      "0_your_email": "miner4@example.com",
       "1_minerid": "f01660839",
-      "2_city": "Toronto",
-      "2_country_code": "Canada",
+      "1_city": "New York City",
+      "1_country_code": "US",
       "2_minerid": "f01558689",
+      "2_city": "Toronto",
+      "2_country_code": "CA",
       "responseId": "ACYDBNiCkY2UM8sRM-clGuL3XAMTsHjOXQITA4KNb94u-W3b0C4Ggr5H4LmCu_SEOsbtUS7",
       "timestamp": "2022-08-05T18:59:26.228879Z"
     },
@@ -230,7 +232,7 @@
         "Miner": {
           "MinerID": "f01660839",
           "City": "New York City",
-          "CountyCode": "United States"
+          "CountyCode": "US"
         },
         "Success": false
       },
@@ -238,7 +240,7 @@
         "Miner": {
           "MinerID": "f01558689",
           "City": "Toronto",
-          "CountyCode": "Canada"
+          "CountyCode": "CA"
         },
         "Success": true
       }

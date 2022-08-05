@@ -29,15 +29,16 @@ async function run (
   const inputFields = [
     "responseId",
     "timestamp",
-    "0_name",
-    "0_slack_id",
+    "0_storage_provider_operator_name",
+    "0_your_name",
+    "0_your_handle_on_filecoin_io_slack",
+    "0_your_email",
     "1_minerid",
     "1_city",
     "1_country_code",
     "2_minerid",
     "2_city",
     "2_country_code",
-    "3_anything_else_you_want_us_to"
   ]
   */
   const inputData = fs.readFileSync(inputFile, 'utf8')
@@ -81,19 +82,20 @@ async function run (
       const orgId = oldOrgsRecords.length + newOrgsRecords.length + 1
       newOrgsRecords.push({
         sp_org_id: orgId,
-        sp_organization: fields['0_name'],
-        slack_id: fields['0_slack_id']
+        sp_organization: fields['0_storage_provider_operator_name'],
+        contact_name: fields['0_your_name'],
+        contact_slack_id: fields['0_your_handle_on_filecoin_io_slack']
       })
       for (const miner of miners) {
         newSpListRecords.push({
           sp_id: miner.minerId,
-          sp_organization: fields['0_name'],
+          sp_organization: fields['0_storage_provider_operator_name'],
           sp_org_id: orgId,
           loc_city: miner.city,
           loc_country: miner.countryCode,
           loc_continent: 'XX', // FIXME
           active: true,
-          slack_id: fields['0_slack_id']
+          slack_id: fields['0_your_handle_on_filecoin_io_slack']
         })
       }
     }
@@ -102,7 +104,7 @@ async function run (
 
   // Write organizations.csv
   const orgsRecords = oldOrgsRecords.concat(newOrgsRecords)
-  const orgsOutputFields = ['sp_org_id', 'sp_organization', 'slack_id']
+  const orgsOutputFields = ['sp_org_id', 'sp_organization', 'contact_name', 'contact_slack_id']
   const orgsCsvWriter = createCsvWriter({
     path: outputOrgsCsv,
     header: orgsOutputFields.map(field => ({ id: field, title: field }))
