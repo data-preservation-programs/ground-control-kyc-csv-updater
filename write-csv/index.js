@@ -12,9 +12,13 @@ async function run (
 ) {
   // organizations.csv
   let oldOrgsRecords = []
+  let organizationsByName = new Map()
   if (fs.existsSync(outputOrgsCsv)) {
     const csvData = fs.readFileSync(outputOrgsCsv, 'utf8')
     oldOrgsRecords = await neatCsv(csvData)
+    for (const orgRecord of oldOrgsRecords) {
+      organizationsByName.set(orgRecord.sp_organization, orgRecord)
+    }
   }
 
   // sp-list.csv
@@ -79,13 +83,21 @@ async function run (
     input.pass = pass
     input.errors = errors
     if (pass) {
-      const orgId = oldOrgsRecords.length + newOrgsRecords.length + 1
-      newOrgsRecords.push({
-        sp_org_id: orgId,
-        sp_organization: fields['0_storage_provider_operator_name'],
-        contact_name: fields['0_your_name'],
-        contact_slack_id: fields['0_your_handle_on_filecoin_io_slack']
-      })
+      const orgName = fields['0_storage_provider_operator_name']
+      let orgId
+      if (organizationsByName.has(orgName)) {
+        orgId = organizationsByName.get(orgName).sp_org_id
+      } else {
+        orgId = oldOrgsRecords.length + newOrgsRecords.length + 1
+        newOrgRecord = {
+          sp_org_id: orgId,
+          sp_organization: fields['0_storage_provider_operator_name'],
+          contact_name: fields['0_your_name'],
+          contact_slack_id: fields['0_your_handle_on_filecoin_io_slack']
+        }
+        newOrgsRecords.push(newOrgRecord)
+        organizationsByName.set(orgName, newOrgRecord)
+      }
       for (const miner of miners) {
         newSpListRecords.push({
           sp_id: miner.minerId,
