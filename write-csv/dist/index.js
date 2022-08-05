@@ -10176,7 +10176,7 @@ async function run (
   })
   const newProcessedRecords = inputs.map(
     ({ fields, pass, errors }) => ({
-      responseId: fields.responseId,
+      response_id: fields.responseId,
       timestamp: fields.timestamp,
       processed_time: now,
       success: pass,

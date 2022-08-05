@@ -35,10 +35,10 @@ async function run (
     "0_your_email",
     "1_minerid",
     "1_city",
-    "1_country_code",
+    "1_country",
     "2_minerid",
     "2_city",
-    "2_country_code",
+    "2_country",
   ]
   */
   const inputData = fs.readFileSync(inputFile, 'utf8')
@@ -65,7 +65,7 @@ async function run (
         const miner = {
           minerId,
           city: fields[`${i}_city`],
-          countryCode: fields[`${i}_country_code`]
+          countryCode: fields[`${i}_country`]
         }
         miner.pass = !!minerCheckResults[minerId]
         if (!miner.pass) {
@@ -158,7 +158,7 @@ async function run (
   })
   const newProcessedRecords = inputs.map(
     ({ fields, pass, errors }) => ({
-      responseId: fields.responseId,
+      response_id: fields.responseId,
       timestamp: fields.timestamp,
       processed_time: now,
       success: pass,
