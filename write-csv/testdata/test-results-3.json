@@ -51,16 +51,16 @@
       "0_your_name": "Miner5 Person X",
       "0_your_handle_on_filecoin_io_slack": "miner5",
       "0_your_email": "miner5@example.com",
-      "1_minerid": "f01878005",
+      "1_minerid": "f01878006",
       "1_city": "Singapore",
       "1_country": "SG",
-      "responseId": "ACYDBNgN1_-BdWxb3qObfu-y3mMhocT96QtBxLjfGODeidJuQIiM6Nd4NUmc4tXSo7AoVK3",
-      "timestamp": "2022-08-05T05:57:51.176799Z"
+      "responseId": "ACYDBNgN1_-BdWxb3qObfu-y3mMhocT96QtBxLjfGODeidJuQIiM6Nd4NUmc4tXSo7AoVK4",
+      "timestamp": "2022-08-05T05:57:52.176799Z"
     },
     "MinerCheckResults": [
       {
         "Miner": {
-          "MinerID": "f01878005",
+          "MinerID": "f01878006",
           "City": "Singapore",
           "CountyCode": "SG"
         },
@@ -74,16 +74,16 @@
       "0_your_name": "Miner5 Person",
       "0_your_handle_on_filecoin_io_slack": "miner5 X",
       "0_your_email": "miner5@example.com",
-      "1_minerid": "f01878005",
+      "1_minerid": "f01878007",
       "1_city": "Singapore",
       "1_country": "SG",
-      "responseId": "ACYDBNgN1_-BdWxb3qObfu-y3mMhocT96QtBxLjfGODeidJuQIiM6Nd4NUmc4tXSo7AoVK3",
-      "timestamp": "2022-08-05T05:57:51.176799Z"
+      "responseId": "ACYDBNgN1_-BdWxb3qObfu-y3mMhocT96QtBxLjfGODeidJuQIiM6Nd4NUmc4tXSo7AoVK5",
+      "timestamp": "2022-08-05T05:57:53.176799Z"
     },
     "MinerCheckResults": [
       {
         "Miner": {
-          "MinerID": "f01878005",
+          "MinerID": "f01878007",
           "City": "Singapore",
           "CountyCode": "SG"
         },
@@ -97,16 +97,73 @@
       "0_your_name": "Miner5 Person",
       "0_your_handle_on_filecoin_io_slack": "miner5",
       "0_your_email": "miner5-x@example.com",
-      "1_minerid": "f01878005",
+      "1_minerid": "f01878008",
       "1_city": "Singapore",
       "1_country": "SG",
-      "responseId": "ACYDBNgN1_-BdWxb3qObfu-y3mMhocT96QtBxLjfGODeidJuQIiM6Nd4NUmc4tXSo7AoVK3",
-      "timestamp": "2022-08-05T05:57:51.176799Z"
+      "responseId": "ACYDBNgN1_-BdWxb3qObfu-y3mMhocT96QtBxLjfGODeidJuQIiM6Nd4NUmc4tXSo7AoVK6",
+      "timestamp": "2022-08-05T05:57:54.176799Z"
     },
     "MinerCheckResults": [
       {
         "Miner": {
-          "MinerID": "f01878005",
+          "MinerID": "f01878008",
+          "City": "Singapore",
+          "CountyCode": "SG"
+        },
+        "Success": true
+      }
+    ]
+  },
+  {
+    "ResponseFields": {
+      "0_storage_provider_operator_name": "Miner5_Duplicate",
+      "0_your_name": "Miner5 Person",
+      "0_your_handle_on_filecoin_io_slack": "miner5",
+      "0_your_email": "miner5@example.com",
+      "1_minerid": "f01877571",
+      "1_city": "Singapore",
+      "1_country": "SG",
+      "responseId": "ACYDBNgN1_-BdWxb3qObfu-y3mMhocT96QtBxLjfGODeidJuQIiM6Nd4NUmc4tXSo7AoVKd",
+      "timestamp": "2022-08-05T05:57:55.176799Z"
+    },
+    "MinerCheckResults": [
+      {
+        "Miner": {
+          "MinerID": "f01877571",
+          "City": "Singapore",
+          "CountyCode": "SG"
+        },
+        "Success": true
+      }
+    ]
+  },
+  {
+    "ResponseFields": {
+      "0_storage_provider_operator_name": "Miner5_Duplicate",
+      "0_your_name": "Miner5 Person",
+      "0_your_handle_on_filecoin_io_slack": "miner5",
+      "0_your_email": "miner5@example.com",
+      "1_minerid": "f01877572",
+      "1_city": "Singapore",
+      "1_country": "SG",
+      "2_minerid": "f01877572",
+      "2_city": "Singapore",
+      "2_country": "SG",
+      "responseId": "ACYDBNgN1_-BdWxb3qObfu-y3mMhocT96QtBxLjfGODeidJuQIiM6Nd4NUmc4tXSo7AoVKd",
+      "timestamp": "2022-08-05T05:57:55.176799Z"
+    },
+    "MinerCheckResults": [
+      {
+        "Miner": {
+          "MinerID": "f01877572",
+          "City": "Singapore",
+          "CountyCode": "SG"
+        },
+        "Success": true
+      },
+      {
+        "Miner": {
+          "MinerID": "f01877572",
           "City": "Singapore",
           "CountyCode": "SG"
         },

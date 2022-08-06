@@ -12,7 +12,7 @@ async function run (
 ) {
   // organizations.csv
   let oldOrgsRecords = []
-  let organizationsByName = new Map()
+  const organizationsByName = new Map()
   if (fs.existsSync(outputOrgsCsv)) {
     const csvData = fs.readFileSync(outputOrgsCsv, 'utf8')
     oldOrgsRecords = await neatCsv(csvData)
@@ -26,9 +26,13 @@ async function run (
 
   // sp-list.csv
   let oldSpListRecords = []
+  const spByMinerId = new Map()
   if (fs.existsSync(outputSpListCsv)) {
     const csvData = fs.readFileSync(outputSpListCsv, 'utf8')
     oldSpListRecords = await neatCsv(csvData)
+    for (const spListRecord of oldSpListRecords) {
+      spByMinerId.set(spListRecord.sp_id, spListRecord)
+    }
   }
 
   // Read input records
@@ -65,6 +69,7 @@ async function run (
     }
 
     const miners = []
+    const minerIds = new Set()
     for (let i = 1; i <= 3; i++) {
       if (fields[`${i}_minerid`]) {
         const minerId = fields[`${i}_minerid`]
@@ -77,7 +82,15 @@ async function run (
         if (!miner.pass) {
           errors.push(`${minerId} failed`)
         }
-        miners.push(miner)
+        if (spByMinerId.has(minerId)) {
+          errors.push(`${minerId} already listed`)
+        }
+        if (minerIds.has(minerId)) {
+          errors.push(`${minerId} submitted more than once`)
+        } else {
+          minerIds.add(minerId)
+          miners.push(miner)
+        }
       }
     }
 
@@ -97,12 +110,10 @@ async function run (
         ) {
           errors.push(
             `Organization Slack ID differs, ` +
-              `"${fields['0_your_handle_on_filecoin_io_slack']}" != "${existingOrg.contact_slack_id}"`
+              `"${fields['0_your_handle_on_filecoin_io_slack']}" != ` +
+              `"${existingOrg.contact_slack_id}"`
           )
-        } else if (
-          existingOrg.contact_email !==
-          fields['0_your_email']
-        ) {
+        } else if (existingOrg.contact_email !== fields['0_your_email']) {
           errors.push(
             `Organization contact email differs, ` +
               `"${fields['0_your_email']}" != "${existingOrg.contact_email}"`
@@ -127,7 +138,7 @@ async function run (
     input.errors = errors
     if (input.pass) {
       for (const miner of miners) {
-        newSpListRecords.push({
+        const spListRecord = {
           sp_id: miner.minerId,
           sp_organization: fields['0_storage_provider_operator_name'],
           sp_org_id: orgId,
@@ -136,7 +147,9 @@ async function run (
           loc_continent: 'XX', // FIXME
           active: true,
           slack_id: fields['0_your_handle_on_filecoin_io_slack']
-        })
+        }
+        newSpListRecords.push(spListRecord)
+        spByMinerId.set(miner.minerId, spListRecord)
       }
     }
     inputs.push(input)
