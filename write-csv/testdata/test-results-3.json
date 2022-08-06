@@ -44,5 +44,74 @@
         "Success": true
       }
     ]
+  },
+  {
+    "ResponseFields": {
+      "0_storage_provider_operator_name": "Miner5_Duplicate",
+      "0_your_name": "Miner5 Person X",
+      "0_your_handle_on_filecoin_io_slack": "miner5",
+      "0_your_email": "miner5@example.com",
+      "1_minerid": "f01878005",
+      "1_city": "Singapore",
+      "1_country": "SG",
+      "responseId": "ACYDBNgN1_-BdWxb3qObfu-y3mMhocT96QtBxLjfGODeidJuQIiM6Nd4NUmc4tXSo7AoVK3",
+      "timestamp": "2022-08-05T05:57:51.176799Z"
+    },
+    "MinerCheckResults": [
+      {
+        "Miner": {
+          "MinerID": "f01878005",
+          "City": "Singapore",
+          "CountyCode": "SG"
+        },
+        "Success": true
+      }
+    ]
+  },
+  {
+    "ResponseFields": {
+      "0_storage_provider_operator_name": "Miner5_Duplicate",
+      "0_your_name": "Miner5 Person",
+      "0_your_handle_on_filecoin_io_slack": "miner5 X",
+      "0_your_email": "miner5@example.com",
+      "1_minerid": "f01878005",
+      "1_city": "Singapore",
+      "1_country": "SG",
+      "responseId": "ACYDBNgN1_-BdWxb3qObfu-y3mMhocT96QtBxLjfGODeidJuQIiM6Nd4NUmc4tXSo7AoVK3",
+      "timestamp": "2022-08-05T05:57:51.176799Z"
+    },
+    "MinerCheckResults": [
+      {
+        "Miner": {
+          "MinerID": "f01878005",
+          "City": "Singapore",
+          "CountyCode": "SG"
+        },
+        "Success": true
+      }
+    ]
+  },
+  {
+    "ResponseFields": {
+      "0_storage_provider_operator_name": "Miner5_Duplicate",
+      "0_your_name": "Miner5 Person",
+      "0_your_handle_on_filecoin_io_slack": "miner5",
+      "0_your_email": "miner5-x@example.com",
+      "1_minerid": "f01878005",
+      "1_city": "Singapore",
+      "1_country": "SG",
+      "responseId": "ACYDBNgN1_-BdWxb3qObfu-y3mMhocT96QtBxLjfGODeidJuQIiM6Nd4NUmc4tXSo7AoVK3",
+      "timestamp": "2022-08-05T05:57:51.176799Z"
+    },
+    "MinerCheckResults": [
+      {
+        "Miner": {
+          "MinerID": "f01878005",
+          "City": "Singapore",
+          "CountyCode": "SG"
+        },
+        "Success": true
+      }
+    ]
   }
 ]

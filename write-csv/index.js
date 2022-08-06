@@ -17,7 +17,10 @@ async function run (
     const csvData = fs.readFileSync(outputOrgsCsv, 'utf8')
     oldOrgsRecords = await neatCsv(csvData)
     for (const orgRecord of oldOrgsRecords) {
-      organizationsByName.set(orgRecord.sp_organization, orgRecord)
+      organizationsByName.set(
+        orgRecord.sp_organization.toLowerCase(),
+        orgRecord
+      )
     }
   }
 
@@ -54,7 +57,6 @@ async function run (
   for (const inputRecord of inputParsed) {
     const fields = inputRecord.ResponseFields
     const input = { fields }
-    let pass = true
     const errors = []
 
     const minerCheckResults = {}
@@ -74,30 +76,56 @@ async function run (
         miner.pass = !!minerCheckResults[minerId]
         if (!miner.pass) {
           errors.push(`${minerId} failed`)
-          pass = false
         }
         miners.push(miner)
       }
     }
 
-    input.pass = pass
-    input.errors = errors
-    if (pass) {
+    let orgId
+    if (errors.length === 0) {
       const orgName = fields['0_storage_provider_operator_name']
-      let orgId
-      if (organizationsByName.has(orgName)) {
-        orgId = organizationsByName.get(orgName).sp_org_id
+      if (organizationsByName.has(orgName.toLowerCase())) {
+        const existingOrg = organizationsByName.get(orgName.toLowerCase())
+        if (existingOrg.contact_name !== fields['0_your_name']) {
+          errors.push(
+            `Organization contact name differs, ` +
+              `"${fields['0_your_name']}" != "${existingOrg.contact_name}"`
+          )
+        } else if (
+          existingOrg.contact_slack_id !==
+          fields['0_your_handle_on_filecoin_io_slack']
+        ) {
+          errors.push(
+            `Organization Slack ID differs, ` +
+              `"${fields['0_your_handle_on_filecoin_io_slack']}" != "${existingOrg.contact_slack_id}"`
+          )
+        } else if (
+          existingOrg.contact_email !==
+          fields['0_your_email']
+        ) {
+          errors.push(
+            `Organization contact email differs, ` +
+              `"${fields['0_your_email']}" != "${existingOrg.contact_email}"`
+          )
+        } else {
+          orgId = existingOrg.sp_org_id
+        }
       } else {
         orgId = oldOrgsRecords.length + newOrgsRecords.length + 1
         newOrgRecord = {
           sp_org_id: orgId,
           sp_organization: fields['0_storage_provider_operator_name'],
           contact_name: fields['0_your_name'],
-          contact_slack_id: fields['0_your_handle_on_filecoin_io_slack']
+          contact_slack_id: fields['0_your_handle_on_filecoin_io_slack'],
+          contact_email: fields['0_your_email']
         }
         newOrgsRecords.push(newOrgRecord)
-        organizationsByName.set(orgName, newOrgRecord)
+        organizationsByName.set(orgName.toLowerCase(), newOrgRecord)
       }
+    }
+    input.pass = errors.length === 0
+    input.errors = errors
+    if (input.pass) {
       for (const miner of miners) {
         newSpListRecords.push({
           sp_id: miner.minerId,
@@ -116,7 +144,13 @@ async function run (
 
   // Write organizations.csv
   const orgsRecords = oldOrgsRecords.concat(newOrgsRecords)
-  const orgsOutputFields = ['sp_org_id', 'sp_organization', 'contact_name', 'contact_slack_id']
+  const orgsOutputFields = [
+    'sp_org_id',
+    'sp_organization',
+    'contact_name',
+    'contact_slack_id',
+    'contact_email'
+  ]
   const orgsCsvWriter = createCsvWriter({
     path: outputOrgsCsv,
     header: orgsOutputFields.map(field => ({ id: field, title: field }))
@@ -168,15 +202,13 @@ async function run (
     path: outputProcessedCsv,
     header: processedFields.map(field => ({ id: field, title: field }))
   })
-  const newProcessedRecords = inputs.map(
-    ({ fields, pass, errors }) => ({
-      response_id: fields.responseId,
-      timestamp: fields.timestamp,
-      processed_time: now,
-      success: pass,
-      error_message: errors ? errors.join(',') : undefined
-    })
-  )
+  const newProcessedRecords = inputs.map(({ fields, pass, errors }) => ({
+    response_id: fields.responseId,
+    timestamp: fields.timestamp,
+    processed_time: now,
+    success: pass,
+    error_message: errors ? errors.join(',') : undefined
+  }))
   const processedRecords = oldProcessedRecords.concat(newProcessedRecords)
   await processedCsvWriter.writeRecords(processedRecords)
   console.log(
