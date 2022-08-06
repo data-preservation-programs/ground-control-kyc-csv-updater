@@ -10103,11 +10103,9 @@ async function run (
         if (spByMinerId.has(minerId)) {
           errors.push(`${minerId} already listed`)
         }
-        console.log('Jim has', minerId, minerIds.has(minerId))
         if (minerIds.has(minerId)) {
           errors.push(`${minerId} submitted more than once`)
         } else {
-          console.log('Jim add', minerId)
           minerIds.add(minerId)
           miners.push(miner)
         }
