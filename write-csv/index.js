@@ -12,6 +12,7 @@ async function run (
 ) {
   // organizations.csv
   let oldOrgsRecords = []
+  let oldOrgsMaxId = 0
   const organizationsByName = new Map()
   if (fs.existsSync(outputOrgsCsv)) {
     const csvData = fs.readFileSync(outputOrgsCsv, 'utf8')
@@ -21,6 +22,7 @@ async function run (
         orgRecord.sp_organization.toLowerCase(),
         orgRecord
       )
+      oldOrgsMaxId = Math.max(oldOrgsMaxId, orgRecord.sp_org_id)
     }
   }
 
@@ -122,7 +124,7 @@ async function run (
           orgId = existingOrg.sp_org_id
         }
       } else {
-        orgId = oldOrgsRecords.length + newOrgsRecords.length + 1
+        orgId = oldOrgsMaxId + newOrgsRecords.length + 1
         newOrgRecord = {
           sp_org_id: orgId,
           sp_organization: fields['0_storage_provider_operator_name'],
