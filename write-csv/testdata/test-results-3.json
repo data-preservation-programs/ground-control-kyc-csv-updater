@@ -16,7 +16,7 @@
         "Miner": {
           "MinerID": "f01877571",
           "City": "Singapore",
-          "CountyCode": "SG"
+          "CountryCode": "SG"
         },
         "Success": true
       }
@@ -39,7 +39,7 @@
         "Miner": {
           "MinerID": "f01878005",
           "City": "Singapore",
-          "CountyCode": "SG"
+          "CountryCode": "SG"
         },
         "Success": true
       }
@@ -62,7 +62,7 @@
         "Miner": {
           "MinerID": "f01878006",
           "City": "Singapore",
-          "CountyCode": "SG"
+          "CountryCode": "SG"
         },
         "Success": true
       }
@@ -85,7 +85,7 @@
         "Miner": {
           "MinerID": "f01878007",
           "City": "Singapore",
-          "CountyCode": "SG"
+          "CountryCode": "SG"
         },
         "Success": true
       }
@@ -108,7 +108,7 @@
         "Miner": {
           "MinerID": "f01878008",
           "City": "Singapore",
-          "CountyCode": "SG"
+          "CountryCode": "SG"
         },
         "Success": true
       }
@@ -131,7 +131,7 @@
         "Miner": {
           "MinerID": "f01877571",
           "City": "Singapore",
-          "CountyCode": "SG"
+          "CountryCode": "SG"
         },
         "Success": true
       }
@@ -157,7 +157,7 @@
         "Miner": {
           "MinerID": "f01877572",
           "City": "Singapore",
-          "CountyCode": "SG"
+          "CountryCode": "SG"
         },
         "Success": true
       },
@@ -165,7 +165,7 @@
         "Miner": {
           "MinerID": "f01877572",
           "City": "Singapore",
-          "CountyCode": "SG"
+          "CountryCode": "SG"
         },
         "Success": true
       }

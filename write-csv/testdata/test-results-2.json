@@ -16,7 +16,7 @@
         "Miner": {
           "MinerID": "f039940",
           "City": "Mianyang",
-          "CountyCode": "CN"
+          "CountryCode": "CN"
         },
         "Success": true,
         "OutputLines": [
@@ -94,7 +94,7 @@
         "Miner": {
           "MinerID": "f01660837",
           "City": "Las Vegas",
-          "CountyCode": "United States"
+          "CountryCode": "United States"
         },
         "Success": true,
         "OutputLines": [
@@ -154,7 +154,7 @@
         "Miner": {
           "MinerID": "f01558688",
           "City": "Montreal",
-          "CountyCode": "Canada"
+          "CountryCode": "Canada"
         },
         "Success": true,
         "OutputLines": [
@@ -232,15 +232,154 @@
         "Miner": {
           "MinerID": "f01660839",
           "City": "New York City",
-          "CountyCode": "US"
+          "CountryCode": "US"
         },
-        "Success": false
+        "Success": false,
+        "OutputLines": [
+          {
+            "Time": "2022-08-18T16:02:38.843641636Z",
+            "Action": "run",
+            "Package": "github.com/jimpick/sp-kyc-checks/checks/minpower",
+            "Test": "TestMinPower"
+          },
+          {
+            "Time": "2022-08-18T16:02:38.843780736Z",
+            "Action": "output",
+            "Package": "github.com/jimpick/sp-kyc-checks/checks/minpower",
+            "Test": "TestMinPower",
+            "Output": "=== RUN   TestMinPower\n"
+          },
+          {
+            "Time": "2022-08-18T16:02:38.986485979Z",
+            "Action": "run",
+            "Package": "github.com/jimpick/sp-kyc-checks/checks/geoip",
+            "Test": "TestGeoMatchExists"
+          },
+          {
+            "Time": "2022-08-18T16:02:38.986508079Z",
+            "Action": "output",
+            "Package": "github.com/jimpick/sp-kyc-checks/checks/geoip",
+            "Test": "TestGeoMatchExists",
+            "Output": "=== RUN   TestGeoMatchExists\n"
+          },
+          {
+            "Time": "2022-08-18T16:02:39.152698711Z",
+            "Action": "output",
+            "Package": "github.com/jimpick/sp-kyc-checks/checks/minpower",
+            "Test": "TestMinPower",
+            "Output": "2022/08/18 16:02:39 Miner power f01890497: \u0026{{0 0} {19445282016789004288 20922404698482573312} false}\n"
+          },
+          {
+            "Time": "2022-08-18T16:02:39.152772011Z",
+            "Action": "output",
+            "Package": "github.com/jimpick/sp-kyc-checks/checks/minpower",
+            "Test": "TestMinPower",
+            "Output": "2022/08/18 16:02:39 Insufficient power f01890497: 0 \u003c 10995116277760\n"
+          },
+          {
+            "Time": "2022-08-18T16:02:39.152844211Z",
+            "Action": "output",
+            "Package": "github.com/jimpick/sp-kyc-checks/checks/minpower",
+            "Test": "TestMinPower",
+            "Output": "    check_power_test.go:32: \n"
+          },
+          {
+            "Time": "2022-08-18T16:02:39.152852011Z",
+            "Action": "output",
+            "Package": "github.com/jimpick/sp-kyc-checks/checks/minpower",
+            "Test": "TestMinPower",
+            "Output": "        \tError Trace:\tcheck_power_test.go:32\n"
+          },
+          {
+            "Time": "2022-08-18T16:02:39.152856611Z",
+            "Action": "output",
+            "Package": "github.com/jimpick/sp-kyc-checks/checks/minpower",
+            "Test": "TestMinPower",
+            "Output": "        \tError:      \tNot equal: \n"
+          },
+          {
+            "Time": "2022-08-18T16:02:39.152860411Z",
+            "Action": "output",
+            "Package": "github.com/jimpick/sp-kyc-checks/checks/minpower",
+            "Test": "TestMinPower",
+            "Output": "        \t            \texpected: true\n"
+          },
+          {
+            "Time": "2022-08-18T16:02:39.152863711Z",
+            "Action": "output",
+            "Package": "github.com/jimpick/sp-kyc-checks/checks/minpower",
+            "Test": "TestMinPower",
+            "Output": "        \t            \tactual  : false\n"
+          },
+          {
+            "Time": "2022-08-18T16:02:39.152867411Z",
+            "Action": "output",
+            "Package": "github.com/jimpick/sp-kyc-checks/checks/minpower",
+            "Test": "TestMinPower",
+            "Output": "        \tTest:       \tTestMinPower\n"
+          },
+          {
+            "Time": "2022-08-18T16:02:39.152877111Z",
+            "Action": "output",
+            "Package": "github.com/jimpick/sp-kyc-checks/checks/minpower",
+            "Test": "TestMinPower",
+            "Output": "--- FAIL: TestMinPower (0.31s)\n"
+          },
+          {
+            "Time": "2022-08-18T16:02:39.152880311Z",
+            "Action": "fail",
+            "Package": "github.com/jimpick/sp-kyc-checks/checks/minpower",
+            "Test": "TestMinPower"
+          },
+          {
+            "Time": "2022-08-18T16:02:39.152885711Z",
+            "Action": "output",
+            "Package": "github.com/jimpick/sp-kyc-checks/checks/minpower",
+            "Output": "FAIL\n"
+          },
+          {
+            "Time": "2022-08-18T16:02:39.154074316Z",
+            "Action": "output",
+            "Package": "github.com/jimpick/sp-kyc-checks/checks/minpower",
+            "Output": "FAIL\tgithub.com/jimpick/sp-kyc-checks/checks/minpower\t0.317s\n"
+          },
+          {
+            "Time": "2022-08-18T16:02:39.154088416Z",
+            "Action": "fail",
+            "Package": "github.com/jimpick/sp-kyc-checks/checks/minpower"
+          },
+          {
+            "Time": "2022-08-18T16:02:39.296009056Z",
+            "Action": "output",
+            "Package": "github.com/jimpick/sp-kyc-checks/checks/geoip",
+            "Test": "TestGeoMatchExists",
+            "Output": "2022/08/18 16:02:39 Chain height: 2084405\n"
+          },
+          {
+            "Time": "2022-08-18T16:02:39.660377041Z",
+            "Action": "output",
+            "Package": "github.com/jimpick/sp-kyc-checks/checks/geoip",
+            "Test": "TestGeoMatchExists",
+            "Output": "2022/08/18 16:02:39 Missing GOOGLE_MAPS_API_KEY\n"
+          },
+          {
+            "Time": "2022-08-18T16:02:39.663269252Z",
+            "Action": "output",
+            "Package": "github.com/jimpick/sp-kyc-checks/checks/geoip",
+            "Output": "FAIL\tgithub.com/jimpick/sp-kyc-checks/checks/geoip\t0.684s\n"
+          },
+          {
+            "Time": "2022-08-18T16:02:39.663290252Z",
+            "Action": "fail",
+            "Package": "github.com/jimpick/sp-kyc-checks/checks/geoip"
+          }
+        ]
       },
       {
         "Miner": {
           "MinerID": "f01558689",
           "City": "Toronto",
-          "CountyCode": "CA"
+          "CountryCode": "CA"
         },
         "Success": true
       }

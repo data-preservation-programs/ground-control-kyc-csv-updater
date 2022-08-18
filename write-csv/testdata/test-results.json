@@ -16,7 +16,7 @@
         "Miner": {
           "MinerID": "f02620",
           "City": "Krakow",
-          "CountyCode": "PL"
+          "CountryCode": "PL"
         },
         "Success": true,
         "OutputLines": [

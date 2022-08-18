@@ -27,6 +27,35 @@ async function createIssue (input) {
   for (const field in input.fields) {
     fields.push(`| ${field} | ${input.fields[field]} |`)
   }
+  let testOutput = '\n## Output from Checks\n\n'
+  for (const minerResult of input.results) {
+    if (minerResult.OutputLines && minerResult.OutputLines.length > 0) {
+      const packageLines = {}
+      for (const line of minerResult.OutputLines) {
+        if (line.Package) {
+          if (!packageLines[line.Package]) {
+            packageLines[line.Package] = []
+          }
+          const lines = packageLines[line.Package]
+          if (line.Action === 'output') {
+            if (line.Test) {
+              lines.push(line.Test + ': ' + line.Output)
+            } else {
+              lines.push(line.Output)
+            }
+          }
+        }
+      }
+      testOutput += `Miner ID: ${minerResult.Miner.MinerID} ` +
+        `(${minerResult.Miner.City}, ${minerResult.Miner.CountryCode})\n\n` +
+        '```\n'
+      for (const package in packageLines) {
+        testOutput += `${package}:\n\n`
+        testOutput += packageLines[package].join('\n') + '\n\n'
+      }
+      testOutput += '```\n'
+    }
+  }
   const data = {
     owner: process.env.GITHUB_REPOSITORY_OWNER,
     repo: process.env.GITHUB_REPOSITORY.split('/').slice(-1)[0],
@@ -41,6 +70,8 @@ ${fields.join('\n')}
 ## Errors
 
 ${input.errors.map(err => `* ${err}`).join('\n')}
+
+${testOutput}
 `,
     labels: [
       'failed checks'
@@ -113,7 +144,8 @@ async function run (
 
   for (const inputRecord of inputParsed) {
     const fields = inputRecord.ResponseFields
-    const input = { fields }
+    const results = inputRecord.MinerCheckResults
+    const input = { fields, results }
     const errors = []
 
     const minerCheckResults = {}
