@@ -11144,7 +11144,7 @@ __nccwpck_require__(6456).config()
 
 let octokit
 if (process.env.GITHUB_ACTION) {
-  const token = getInput('github_token')
+  const token = core.getInput('github_token')
   if (!token) {
     console.error( 'Input `github_token` is required' )
     process.exit(1)
