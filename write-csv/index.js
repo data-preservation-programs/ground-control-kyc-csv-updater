@@ -7,7 +7,7 @@ const { Octokit } = require('@octokit/action')
 require('dotenv').config()
 
 let octokit
-if (process.env.GITHUB_ACTION && process.env.GITHUB_TOKEN) {
+if (process.env.GITHUB_ACTION) {
   octokit = new Octokit() // Using @octokit/action
 } else if (process.env.GITHUB_TOKEN && !process.env.SKIP_GITHUB_ISSUES) {
   octokit = new Octokit({ auth: process.env.GITHUB_TOKEN })
