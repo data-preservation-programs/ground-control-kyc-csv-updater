@@ -11,6 +11,4 @@ inputs:
     required: true
 runs:
   using: 'node16'
-  env:
-    GITHUB_TOKEN: ${{ env.GITHUB_TOKEN }}
   main: 'dist/index.js'

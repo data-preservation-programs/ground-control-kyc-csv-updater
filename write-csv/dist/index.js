@@ -11415,6 +11415,8 @@ async function run (
         await createIssue(input)
       }
     }
+  } else {
+    console.log('WARNING: GITHUB_TOKEN is missing, not filing issues!')
   }
 
   console.log('Done.')
