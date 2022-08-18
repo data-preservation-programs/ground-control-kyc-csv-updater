@@ -11418,15 +11418,10 @@ async function run (
       `(${newProcessedRecords.length} new) to ${outputProcessedCsv}`
   )
 
-  // Submit GitHub issues for failures
-  if (process.env.GITHUB_TOKEN) {
-    for (const input of inputs) {
-      if (!input.pass) {
-        await createIssue(input)
-      }
+  for (const input of inputs) {
+    if (!input.pass) {
+      await createIssue(input)
     }
-  } else {
-    console.log('WARNING: GITHUB_TOKEN is missing, not filing issues!')
   }
 
   console.log('Done.')
