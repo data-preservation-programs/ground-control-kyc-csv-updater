@@ -3,10 +3,11 @@ const core = require('@actions/core')
 const github = require('@actions/github')
 const createCsvWriter = require('csv-writer').createObjectCsvWriter
 const neatCsv = require('neat-csv').default
-const { Octokit } = require('@octokit/core')
+const { Octokit } = require('@octokit/action')
 require('dotenv').config()
 
-const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN })
+// const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN })
+const octokit = new Octokit() // Using @octokit/action
 
 async function createIssue (input) {
   console.log('Create GitHub Issue:')
