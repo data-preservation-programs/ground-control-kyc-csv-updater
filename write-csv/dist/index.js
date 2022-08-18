@@ -11175,9 +11175,9 @@ async function createIssue (input) {
           const lines = packageLines[line.Package]
           if (line.Action === 'output') {
             if (line.Test) {
-              lines.push(line.Test + ': ' + line.Output)
+              lines.push(line.Test + ': ' + line.Output.trim())
             } else {
-              lines.push(line.Output)
+              lines.push(line.Output.trim())
             }
           }
         }
