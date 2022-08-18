@@ -9,8 +9,10 @@ inputs:
     required: true
   output-processed-csv:
     required: true
-  GITHUB_TOKEN:
+  github_token:
+    description: "GitHub access token"
     required: true
+    default: ${{ github.token }}
 runs:
   using: 'node16'
   main: 'dist/index.js'

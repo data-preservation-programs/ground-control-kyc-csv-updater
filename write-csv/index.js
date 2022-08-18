@@ -1,14 +1,19 @@
 const fs = require('fs')
 const core = require('@actions/core')
-const github = require('@actions/github')
+const { getOctokit } = require('@actions/github')
 const createCsvWriter = require('csv-writer').createObjectCsvWriter
 const neatCsv = require('neat-csv').default
-const { Octokit } = require('@octokit/action')
+const { Octokit } = require('@octokit/core')
 require('dotenv').config()
 
 let octokit
 if (process.env.GITHUB_ACTION) {
-  octokit = new Octokit() // Using @octokit/action
+  const token = getInput('github_token')
+  if (!token) {
+    console.error( 'Input `github_token` is required' )
+    process.exit(1)
+  }
+  octokit = new getOctokit(token)
 } else if (process.env.GITHUB_TOKEN && !process.env.SKIP_GITHUB_ISSUES) {
   octokit = new Octokit({ auth: process.env.GITHUB_TOKEN })
 }
