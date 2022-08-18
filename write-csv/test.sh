@@ -2,6 +2,8 @@
 
 set -e
 
+export SKIP_GITHUB_ISSUES=true
+
 ./build.sh
 
 T=test-output

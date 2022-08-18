@@ -3,6 +3,47 @@ const core = require('@actions/core')
 const github = require('@actions/github')
 const createCsvWriter = require('csv-writer').createObjectCsvWriter
 const neatCsv = require('neat-csv').default
+const { Octokit } = require('@octokit/core')
+require('dotenv').config()
+
+const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN })
+
+async function createIssue (input) {
+  console.log('Create GitHub Issue:')
+  console.log(input)
+  const fields = []
+  fields.push(`| Field | Value |`)
+  fields.push(`| --- | --- |`)
+  for (const field in input.fields) {
+    fields.push(`| ${field} | ${input.fields[field]} |`)
+  }
+  const data = {
+    owner: process.env.GITHUB_REPOSITORY_OWNER,
+    repo: process.env.GITHUB_REPOSITORY.split('/').slice(-1)[0],
+    title: `Failed: ${input.fields['0_storage_provider_operator_name']}`,
+    body: `
+A Google Form submission failed automated KYC checks:
+
+## Fields
+
+${fields.join('\n')}
+
+## Errors
+
+${input.errors.map(err => `* ${err}`).join('\n')}
+`,
+    labels: [
+      'failed checks'
+    ]
+  }
+  if (process.env.SKIP_GITHUB_ISSUES) {
+    console.log(data)
+  } else {
+    const response = await octokit.request('POST /repos/{owner}/{repo}/issues', data)
+
+    console.log('Response', response)
+  }
+}
 
 async function run (
   inputFile,
@@ -230,6 +271,15 @@ async function run (
     `Wrote ${processedRecords.length} records ` +
       `(${newProcessedRecords.length} new) to ${outputProcessedCsv}`
   )
+
+  // Submit GitHub issues for failures
+  if (process.env.GITHUB_TOKEN) {
+    for (const input of inputs) {
+      if (!input.pass) {
+        await createIssue(input)
+      }
+    }
+  }
 
   console.log('Done.')
 }
