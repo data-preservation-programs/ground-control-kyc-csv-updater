@@ -6,8 +6,12 @@ const neatCsv = require('neat-csv').default
 const { Octokit } = require('@octokit/action')
 require('dotenv').config()
 
-// const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN })
-const octokit = new Octokit() // Using @octokit/action
+let octokit
+if (process.env.GITHUB_ACTION && process.env.GITHUB_TOKEN) {
+  octokit = new Octokit() // Using @octokit/action
+} else if (process.env.GITHUB_TOKEN && !process.env.SKIP_GITHUB_ISSUES) {
+  octokit = new Octokit({ auth: process.env.GITHUB_TOKEN })
+}
 
 async function createIssue (input) {
   console.log('Create GitHub Issue:')
@@ -37,7 +41,7 @@ ${input.errors.map(err => `* ${err}`).join('\n')}
       'failed checks'
     ]
   }
-  if (process.env.SKIP_GITHUB_ISSUES) {
+  if (!octokit || process.env.SKIP_GITHUB_ISSUES) {
     console.log(data)
   } else {
     const response = await octokit.request('POST /repos/{owner}/{repo}/issues', data)
