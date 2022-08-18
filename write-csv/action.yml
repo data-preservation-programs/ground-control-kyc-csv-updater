@@ -9,6 +9,8 @@ inputs:
     required: true
   output-processed-csv:
     required: true
+  GITHUB_TOKEN:
+    required: true
 runs:
   using: 'node16'
   main: 'dist/index.js'
