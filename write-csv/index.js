@@ -63,7 +63,7 @@ async function createIssue (input) {
         `(${minerResult.Miner.City}, ${minerResult.Miner.CountryCode})\n\n` +
         '```\n'
       extraData += JSON.stringify(minerResult.ExtraArtifacts, null, 2)
-      extraData += '```\n'
+      extraData += '\n```\n'
     }
   }
   const data = {
