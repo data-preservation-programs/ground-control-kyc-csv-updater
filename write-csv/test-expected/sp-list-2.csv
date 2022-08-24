@@ -1,5 +1,5 @@
 sp_id,sp_organization,sp_org_id,loc_city,loc_country,loc_continent,active,slack_id
-f02620,Magik,1,Krakow,,XX,true,magik
-f039940,Miner2,2,Mianyang,CN,XX,true,miner2
-f01660837,Miner3,3,Las Vegas,US,XX,true,miner3
-f01558688,Miner3,3,Montreal,CA,XX,true,miner3
+f02620,Magik,1,Krakow,PL,EU,true,magik
+f039940,Miner2,2,Mianyang,CN,AS,true,miner2
+f01660837,Miner3,3,Las Vegas,US,NA,true,miner3
+f01558688,Miner3,3,Montreal,CA,NA,true,miner3

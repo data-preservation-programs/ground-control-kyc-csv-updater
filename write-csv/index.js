@@ -4,6 +4,7 @@ const { getOctokit } = require('@actions/github')
 const createCsvWriter = require('csv-writer').createObjectCsvWriter
 const neatCsv = require('neat-csv').default
 const { Octokit } = require('@octokit/core')
+const countryContinentMap = require('./continent.json')
 require('dotenv').config()
 
 let octokit
@@ -229,7 +230,7 @@ async function run (
           sp_org_id: orgId,
           loc_city: miner.city,
           loc_country: miner.countryCode,
-          loc_continent: 'XX', // FIXME
+          loc_continent: countryContinentMap[miner.countryCode],
           active: true,
           slack_id: fields['0_your_handle_on_filecoin_io_slack']
         }
@@ -357,3 +358,4 @@ try {
 } catch (error) {
   core.setFailed(error.message)
 }
+
