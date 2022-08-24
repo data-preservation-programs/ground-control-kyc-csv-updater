@@ -11173,6 +11173,7 @@ async function createIssue (input) {
     fields.push(`| ${field} | ${input.fields[field]} |`)
   }
   let testOutput = '\n## Output from Checks\n\n'
+  let extraData = '\n## Extra Data used by Checks\n\n'
   for (const minerResult of input.results) {
     if (minerResult.OutputLines && minerResult.OutputLines.length > 0) {
       const packageLines = {}
@@ -11191,6 +11192,7 @@ async function createIssue (input) {
           }
         }
       }
+
       testOutput += `Miner ID: ${minerResult.Miner.MinerID} ` +
         `(${minerResult.Miner.City}, ${minerResult.Miner.CountryCode})\n\n` +
         '```\n'
@@ -11199,6 +11201,13 @@ async function createIssue (input) {
         testOutput += packageLines[package].join('\n') + '\n\n'
       }
       testOutput += '```\n'
+    }
+    if (minerResult.ExtraArtifacts) {
+      extraData += `Miner ID: ${minerResult.Miner.MinerID} ` +
+        `(${minerResult.Miner.City}, ${minerResult.Miner.CountryCode})\n\n` +
+        '```\n'
+      extraData += JSON.stringify(minerResult.ExtraArtifacts, null, 2)
+      extraData += '```\n'
     }
   }
   const data = {
@@ -11217,6 +11226,8 @@ ${fields.join('\n')}
 ${input.errors.map(err => `* ${err}`).join('\n')}
 
 ${testOutput}
+
+${extraData}
 `,
     labels: [
       'failed checks'

@@ -373,7 +373,287 @@
             "Action": "fail",
             "Package": "github.com/jimpick/sp-kyc-checks/checks/geoip"
           }
-        ]
+        ],
+        "ExtraArtifacts": {
+          "GeoData": {
+            "IPsBaidu": {},
+            "IPsGeoIP2": {
+              "69.194.1.66": {
+                "city": {
+                  "confidence": 99,
+                  "geoname_id": 4113956,
+                  "names": {
+                    "en": "Harrison",
+                    "ru": "Харрисон"
+                  }
+                },
+                "continent": {
+                  "code": "NA",
+                  "geoname_id": 6255149,
+                  "names": {
+                    "de": "Nordamerika",
+                    "en": "North America",
+                    "es": "Norteamérica",
+                    "fr": "Amérique du Nord",
+                    "ja": "北アメリカ",
+                    "pt-BR": "América do Norte",
+                    "ru": "Северная Америка",
+                    "zh-CN": "北美洲"
+                  }
+                },
+                "country": {
+                  "confidence": 99,
+                  "geoname_id": 6252001,
+                  "iso_code": "US",
+                  "names": {
+                    "de": "Vereinigte Staaten",
+                    "en": "United States",
+                    "es": "Estados Unidos",
+                    "fr": "États Unis",
+                    "ja": "アメリカ",
+                    "pt-BR": "EUA",
+                    "ru": "США",
+                    "zh-CN": "美国"
+                  }
+                },
+                "location": {
+                  "accuracy_radius": 5,
+                  "average_income": 15794,
+                  "latitude": 36.2467,
+                  "longitude": -93.1054,
+                  "metro_code": 619,
+                  "population_density": 31,
+                  "time_zone": "America/Chicago"
+                },
+                "maxmind": {
+                  "queries_remaining": 12062
+                },
+                "postal": {
+                  "code": "72601",
+                  "confidence": 99
+                },
+                "registered_country": {
+                  "geoname_id": 6252001,
+                  "iso_code": "US",
+                  "names": {
+                    "de": "Vereinigte Staaten",
+                    "en": "United States",
+                    "es": "Estados Unidos",
+                    "fr": "États Unis",
+                    "ja": "アメリカ",
+                    "pt-BR": "EUA",
+                    "ru": "США",
+                    "zh-CN": "美国"
+                  }
+                },
+                "represented_country": {},
+                "subdivisions": [
+                  {
+                    "confidence": 99,
+                    "geoname_id": 4099753,
+                    "iso_code": "AR",
+                    "names": {
+                      "de": "Arkansas",
+                      "en": "Arkansas",
+                      "es": "Arkansas",
+                      "fr": "Arkansas",
+                      "ja": "アーカンソー州",
+                      "pt-BR": "Arkansas",
+                      "ru": "Арканзас",
+                      "zh-CN": "阿肯色州"
+                    }
+                  }
+                ],
+                "traits": {
+                  "autonomous_system_number": 4213,
+                  "autonomous_system_organization": "VPLS-GLOBAL",
+                  "ip_address": "69.194.1.66",
+                  "isp": "Vpls-global",
+                  "network": "69.194.1.0/24",
+                  "organization": "Vpls-global",
+                  "user_type": "residential"
+                }
+              }
+            },
+            "IPsGeolite2": {
+              "69.194.1.66": {
+                "Geolite2": {
+                  "city": {},
+                  "continent": {
+                    "code": "NA",
+                    "geonameId": 6255149,
+                    "names": {
+                      "de": "Nordamerika",
+                      "en": "North America",
+                      "es": "Norteamérica",
+                      "fr": "Amérique du Nord",
+                      "ja": "北アメリカ",
+                      "pt-BR": "América do Norte",
+                      "ru": "Северная Америка",
+                      "zh-CN": "北美洲"
+                    }
+                  },
+                  "country": {
+                    "geonameId": 6252001,
+                    "isoCode": "US",
+                    "names": {
+                      "de": "USA",
+                      "en": "United States",
+                      "es": "Estados Unidos",
+                      "fr": "États-Unis",
+                      "ja": "アメリカ合衆国",
+                      "pt-BR": "Estados Unidos",
+                      "ru": "США",
+                      "zh-CN": "美国"
+                    }
+                  },
+                  "location": {
+                    "accuracyRadius": 1000,
+                    "latitude": 37.751,
+                    "longitude": -97.822,
+                    "timeZone": "America/Chicago"
+                  },
+                  "maxmind": {},
+                  "postal": {},
+                  "registeredCountry": {
+                    "geonameId": 6252001,
+                    "isInEuropeanUnion": false,
+                    "isoCode": "US",
+                    "names": {
+                      "de": "USA",
+                      "en": "United States",
+                      "es": "Estados Unidos",
+                      "fr": "États-Unis",
+                      "ja": "アメリカ合衆国",
+                      "pt-BR": "Estados Unidos",
+                      "ru": "США",
+                      "zh-CN": "美国"
+                    }
+                  },
+                  "representedCountry": {},
+                  "subdivisions": [],
+                  "traits": {
+                    "ipAddress": "69.194.1.66",
+                    "isAnonymous": false,
+                    "isAnonymousProxy": false,
+                    "isAnonymousVpn": false,
+                    "isHostingProvider": false,
+                    "isLegitimateProxy": false,
+                    "isPublicProxy": false,
+                    "isSatelliteProvider": false,
+                    "isTorExitNode": false,
+                    "network": "69.194.0.0/22"
+                  }
+                },
+                "city": "",
+                "continent": "NA",
+                "country": "US",
+                "epoch": 1482801,
+                "lat": 37.751,
+                "long": -97.822,
+                "subdiv1": "",
+                "timestamp": "2022-01-21T18:40:30.000Z"
+              }
+            },
+            "MultiaddrsIPs": [
+              {
+                "chain": false,
+                "dht": true,
+                "epoch": 2091601,
+                "ip": "69.194.1.66",
+                "maddr": "/ip4/69.194.1.66/tcp/49219",
+                "miner": "f01879914",
+                "peerId": "12D3KooWBM8zNoEL2uCGM5RFnewVsxfBJnag3JjzWe8P3kfLFyFn",
+                "timestamp": "2022-08-21T04:00:30.000Z"
+              },
+              {
+                "chain": false,
+                "dht": true,
+                "epoch": 2091601,
+                "ip": "69.194.1.66",
+                "maddr": "/ip4/69.194.1.66/tcp/65083",
+                "miner": "f01879914",
+                "peerId": "12D3KooWBM8zNoEL2uCGM5RFnewVsxfBJnag3JjzWe8P3kfLFyFn",
+                "timestamp": "2022-08-21T04:00:30.000Z"
+              }
+            ]
+          },
+          "GeocodeLocations": [
+            {
+              "Lat": 37.387474,
+              "Lon": -122.0575434
+            }
+          ],
+          "GoogleGeocodeData": [
+            {
+              "address_components": [
+                {
+                  "long_name": "Silicon Valley",
+                  "short_name": "Silicon Valley",
+                  "types": [
+                    "colloquial_area",
+                    "political"
+                  ]
+                },
+                {
+                  "long_name": "California",
+                  "short_name": "CA",
+                  "types": [
+                    "administrative_area_level_1",
+                    "political"
+                  ]
+                },
+                {
+                  "long_name": "United States",
+                  "short_name": "US",
+                  "types": [
+                    "country",
+                    "political"
+                  ]
+                }
+              ],
+              "formatted_address": "Silicon Valley, CA, USA",
+              "geometry": {
+                "bounds": {
+                  "northeast": {
+                    "lat": 37.5854665,
+                    "lng": -121.7412328
+                  },
+                  "southwest": {
+                    "lat": 37.2201406,
+                    "lng": -122.3409633
+                  }
+                },
+                "location": {
+                  "lat": 37.387474,
+                  "lng": -122.0575434
+                },
+                "location_type": "APPROXIMATE",
+                "types": null,
+                "viewport": {
+                  "northeast": {
+                    "lat": 37.5854665,
+                    "lng": -121.7412328
+                  },
+                  "southwest": {
+                    "lat": 37.2201406,
+                    "lng": -122.3409633
+                  }
+                }
+              },
+              "partial_match": false,
+              "place_id": "ChIJOcfP0Iq2j4ARDrXUa7ZWs34",
+              "plus_code": {
+                "compound_code": "",
+                "global_code": ""
+              },
+              "types": [
+                "colloquial_area",
+                "political"
+              ]
+            }
+          ]
+        }
       },
       {
         "Miner": {
