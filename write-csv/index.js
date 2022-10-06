@@ -197,10 +197,7 @@ async function run (
       if (organizationsByName.has(orgName.toLowerCase())) {
         const existingOrg = organizationsByName.get(orgName.toLowerCase())
         if (existingOrg.contact_name !== fields['0_your_name']) {
-          errors.push(
-            `Organization contact name differs, ` +
-              `"${fields['0_your_name']}" != "${existingOrg.contact_name}"`
-          )
+          existingOrg.contact_name = fields['0_your_name']
         } else if (
           existingOrg.contact_slack_id !==
           fields['0_your_handle_on_filecoin_io_slack']
@@ -211,10 +208,7 @@ async function run (
               `"${existingOrg.contact_slack_id}"`
           )
         } else if (existingOrg.contact_email !== fields['0_your_email']) {
-          errors.push(
-            `Organization contact email differs, ` +
-              `"${fields['0_your_email']}" != "${existingOrg.contact_email}"`
-          )
+          existingOrg.contact_email = fields['0_your_email']
         } else {
           orgId = existingOrg.sp_org_id
         }
