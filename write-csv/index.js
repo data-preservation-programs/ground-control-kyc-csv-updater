@@ -202,11 +202,12 @@ async function run (
           existingOrg.contact_slack_id !==
           fields['0_your_handle_on_filecoin_io_slack']
         ) {
-          errors.push(
-            `Organization Slack ID differs, ` +
-              `"${fields['0_your_handle_on_filecoin_io_slack']}" != ` +
-              `"${existingOrg.contact_slack_id}"`
-          )
+          existingOrg.contact_slack_id = fields['0_your_handle_on_filecoin_io_slack']
+//           errors.push(
+//             `Organization Slack ID differs, ` +
+//               `"${fields['0_your_handle_on_filecoin_io_slack']}" != ` +
+//               `"${existingOrg.contact_slack_id}"`
+//           )
         } else if (existingOrg.contact_email !== fields['0_your_email']) {
           existingOrg.contact_email = fields['0_your_email']
         } else {
