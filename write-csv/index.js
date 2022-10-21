@@ -196,6 +196,7 @@ async function run (
       const orgName = fields['0_storage_provider_operator_name']
       if (organizationsByName.has(orgName.toLowerCase())) {
         const existingOrg = organizationsByName.get(orgName.toLowerCase())
+        orgId = existingOrg.sp_org_id
         if (existingOrg.contact_name !== fields['0_your_name']) {
           existingOrg.contact_name = fields['0_your_name']
         } else if (
@@ -210,9 +211,7 @@ async function run (
 //           )
         } else if (existingOrg.contact_email !== fields['0_your_email']) {
           existingOrg.contact_email = fields['0_your_email']
-        } else {
-          orgId = existingOrg.sp_org_id
-        }
+        }         
       } else {
         orgId = oldOrgsMaxId + newOrgsRecords.length + 1
         newOrgRecord = {
