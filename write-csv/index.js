@@ -112,8 +112,9 @@ async function run (
     const csvData = fs.readFileSync(outputOrgsCsv, 'utf8')
     oldOrgsRecords = await neatCsv(csvData)
     for (const orgRecord of oldOrgsRecords) {
+      org = orgRecord.sp_organization ? orgRecord.sp_organization.toLowerCase() : ''
       organizationsByName.set(
-        orgRecord.sp_organization.toLowerCase(),
+        org,
         orgRecord
       )
       oldOrgsMaxId = Math.max(oldOrgsMaxId, orgRecord.sp_org_id)
@@ -211,7 +212,7 @@ async function run (
 //           )
         } else if (existingOrg.contact_email !== fields['0_your_email']) {
           existingOrg.contact_email = fields['0_your_email']
-        }         
+        }
       } else {
         orgId = oldOrgsMaxId + newOrgsRecords.length + 1
         newOrgRecord = {
