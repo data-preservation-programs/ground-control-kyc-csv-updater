@@ -1,4 +1,4 @@
-sp-kyc-csv-updater
+ground-control-kyc-csv-updater
 ===
 
 ## License
