@@ -9,15 +9,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/jimpick/ground-control-kyc-csv-updater.git"
+    "url": "git+https://github.com/data-preservation-programs/ground-control-kyc-csv-updater.git"
   },
   "keywords": [],
   "author": "Jim Pick (@jimpick)",
   "license": "MIT/Apache-2 (Permissive License Stack)",
   "bugs": {
-    "url": "https://github.com/jimpick/ground-control-kyc-csv-updater/issues"
+    "url": "https://github.com/data-preservation-programs/ground-control-kyc-csv-updater/issues"
   },
-  "homepage": "https://github.com/jimpick/ground-control-kyc-csv-updater#readme",
+  "homepage": "https://github.com/data-preservation-programs/ground-control-kyc-csv-updater#readme",
   "devDependencies": {
     "husky": "^8.0.1"
   }

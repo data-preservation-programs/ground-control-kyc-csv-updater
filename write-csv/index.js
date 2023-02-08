@@ -52,9 +52,9 @@ async function createIssue (input) {
       testOutput += `Miner ID: ${minerResult.Miner.MinerID} ` +
         `(${minerResult.Miner.City}, ${minerResult.Miner.CountryCode})\n\n` +
         '```\n'
-      for (const package in packageLines) {
-        testOutput += `${package}:\n\n`
-        testOutput += packageLines[package].join('\n') + '\n\n'
+      for (const pkg in packageLines) {
+        testOutput += `${pkg}:\n\n`
+        testOutput += packageLines[pkg].join('\n') + '\n\n'
       }
       testOutput += '```\n'
     }
